@@ -1,2 +1,0 @@
-FROM austburn.base
-CMD . /env/bin/activate && python /migrations/posts.py && python /application/runserver.py

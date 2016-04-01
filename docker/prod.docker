@@ -1,3 +1,0 @@
-FROM austburn.base
-WORKDIR /application
-CMD . /env/bin/activate && python /migrations/posts.py && uwsgi --json uwsgi.json
