@@ -4,10 +4,10 @@
 
   tasks:
     - name: add cert
-      template: src=templates/austburn_crt.j2 dest=/etc/ssl/certs/austburn.crt
+      template: src=templates/austburn_crt.j2 dest=/etc/ssl/certs/austburn.crt owner=root mode=0600
 
     - name: add key
-      template: src=templates/austburn_key.j2 dest=/etc/ssl/private/austburn.key
+      template: src=templates/austburn_key.j2 dest=/etc/ssl/private/austburn.key owner=root mode=0600
 
     - name: install nginx
       apt: name=nginx state=present
