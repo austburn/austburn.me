@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+{% block content %}
+{% for post in posts %}
+<a class="post-link" href="/posts/{{ post.tag }}">{{ post.title }}</a><span class="date">{{ post.date.month }}/{{ post.date.day }}/{{ post.date.year }}</span>
+<div class="gist">{{ post.gist }}</div>
+{% endfor %}
+{% endblock %}

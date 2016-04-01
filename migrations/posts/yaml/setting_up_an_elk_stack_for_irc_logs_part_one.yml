@@ -1,0 +1,9 @@
+status: publish
+title: "Setting Up An ELK Stack for IRC Logs: Part One"
+date:
+  year:   2015
+  month:  10
+  day:    19
+gist:     |
+  The ELK stack is something that I've learned about through work. In this post, I try to apply what I've learned to my IRC logs.
+post: elk_one.html

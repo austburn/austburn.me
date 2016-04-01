@@ -1,0 +1,8 @@
+status: publish
+title: Creating a Secure Server in Golang
+date:
+  year:   2015
+  month:  5
+  day:    26
+gist: In this post, I discuss basic security protocols you encounter everyday and demonstrate how they work using Golang.
+post: golang_secure_server.html

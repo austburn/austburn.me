@@ -1,0 +1,38 @@
+---
+- name: setup austburn.me on an Ubuntu 14.04LTS server
+  hosts: webservers
+
+  tasks:
+    - name: apt-get update
+      apt: update_cache=yes
+
+    - name: install apt-transport-https
+      apt: name={{ item }} state=present
+      with_items:
+        - apt-transport-https
+        - ca-certificates
+
+    - name: add docker key
+      command: apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
+
+    - name: add docker entry
+      copy: src=files/docker.list dest=/etc/apt/sources.list.d/docker.list
+
+    - name: apt-get update to get docker
+      apt: update_cache=yes
+
+    - name: ensure old docker not present
+      apt: name=lxc-docker state=absent
+
+    - name: install linux-image-extra
+      apt: name=linux-image-extra-{{ ansible_kernel }} state=present
+
+    - name: install additional reqs and docker
+      apt: name={{ item }} state=present
+      with_items:
+        - apparmor
+        - linux-image-generic-lts-trusty
+        - docker-engine
+
+    - name: start docker service
+      service: name=docker state=started

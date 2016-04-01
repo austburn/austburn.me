@@ -1,0 +1,16 @@
+<html>
+  <head>
+    {% include 'head.html' %}
+  </head>
+  <body>
+    {% include 'sidebar.html' %}
+    <div id="content">
+      {% block content %}
+        <div class="post">
+          <div class="heading"><a class="heading-link" href="/posts/{{ post.tag }}">{{ post.title }}</a></div>
+          <div class="content">{{ post.post|safe }}</div>
+        </div>
+      {% endblock %}
+    </div>
+  </body>
+</html>

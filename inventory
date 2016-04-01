@@ -1,0 +1,4 @@
+austburn.me ansible_user=root ansible_host=162.209.99.124
+
+[webservers]
+austburn.me

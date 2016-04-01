@@ -1,0 +1,3 @@
+FROM austburn.base
+WORKDIR /application
+CMD . /env/bin/activate && uwsgi --json uwsgi.json
