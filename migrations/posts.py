@@ -58,8 +58,6 @@ for post in posts:
         with open(os.path.join('/migrations/posts/html', yaml_obj.get('post')), 'r') as f:
             post_content = f.read()
 
-        status = yaml_obj.get('status')
-        if status == 'publish' or environment == 'dev':
             try:
                 conn.execute(insert, tag=tag, title=title, date=date, gist=yaml_obj.get('gist'), post=post_content)
             except IntegrityError:
