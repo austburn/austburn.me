@@ -1,0 +1,49 @@
+---
+- name: pull git repo and start containers
+  hosts: webservers
+
+  tasks:
+    - name: install make and pip
+      apt: name={{ item }} state=present
+      with_items:
+        - make
+        - python-pip
+
+    - name: install docker-py
+      pip: name=docker-py state=present
+
+    - name: data directory
+      file: dest=/data/ state=directory mode=0600
+
+    - name: git
+      git: repo=git@github.com:austburn/austburn.me.git dest=/data/
+
+    - name: build prod container
+      command: make prod-img
+      args:
+        chdir: /data
+
+    - name: start postgres
+      docker:
+        name: postgres
+        image: postgres
+        state: started
+        env:
+            POSTGRES_USER: "{{ pg_user }}"
+            POSTGRES_PASSWORD: "{{ pg_pass }}"
+
+    - name: start application
+      docker:
+        name: austburn-prod
+        image: austburn.prod
+        state: started
+        volumes:
+        - "/data/application:/application"
+        - "/data/migrations:/migrations"
+        links:
+        - "postgres:postgres"
+        ports:
+        - "127.0.0.1:5050:5050"
+        env:
+            POSTGRES_USER: "{{ pg_user }}"
+            POSTGRES_PASSWORD: "{{ pg_pass }}"

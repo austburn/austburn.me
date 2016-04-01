@@ -2,7 +2,7 @@
   "uwsgi": {
     "http": ":5050",
     "master": true,
-    "wsgi-file": "runserver.py",
+    "wsgi-file": "application.py",
     "callable": "app",
     "buffer-size": 32768
   }
