@@ -10,7 +10,7 @@ from flask.ext.sqlalchemy import SQLAlchemy
 
 app = Flask(__name__, static_folder='static')
 handler = FileHandler('/var/log/flask.log')
-app.logging.addHandler(handler)
+app.logger.addHandler(handler)
 
 pg_user = os.getenv('POSTGRES_USER', 'local')
 pg_password = os.getenv('POSTGRES_PASSWORD', 'local')
