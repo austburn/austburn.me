@@ -29,21 +29,21 @@
         image: postgres
         state: started
         env:
-            POSTGRES_USER: "{{ pg_user }}"
-            POSTGRES_PASSWORD: "{{ pg_pass }}"
+          POSTGRES_USER: "{{ pg_user }}"
+          POSTGRES_PASSWORD: "{{ pg_pass }}"
 
     - name: start application
       docker:
         name: austburn-prod
         image: austburn.prod
-        state: started
+        state: restarted
         volumes:
-        - "/data/application:/application"
-        - "/data/migrations:/migrations"
+          - /data/application:/application
+          - /data/migrations:/migrations
         links:
-        - "postgres:postgres"
+          - postgres:postgres
         ports:
-        - "127.0.0.1:5050:5050"
+          - 127.0.0.1:5050:5050
         env:
-            POSTGRES_USER: "{{ pg_user }}"
-            POSTGRES_PASSWORD: "{{ pg_pass }}"
+          POSTGRES_USER: "{{ pg_user }}"
+          POSTGRES_PASSWORD: "{{ pg_pass }}"

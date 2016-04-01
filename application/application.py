@@ -1,7 +1,7 @@
 import os
 import string
 from datetime import datetime
-from logging import Logger
+from logging import FileHandler
 
 from yaml import load
 from flask import Flask, render_template, send_file, url_for
@@ -9,6 +9,9 @@ from flask.ext.sqlalchemy import SQLAlchemy
 
 
 app = Flask(__name__, static_folder='static')
+handler = FileHandler('/var/log/flask.log')
+app.logging.addHandler(handler)
+
 pg_user = os.getenv('POSTGRES_USER', 'local')
 pg_password = os.getenv('POSTGRES_PASSWORD', 'local')
 db_uri = 'postgresql://{pg_user}:{pg_password}@postgres:5432/blog'.format(pg_user=pg_user, pg_password=pg_password)
@@ -52,12 +55,15 @@ def posts():
 
 @app.route('/posts/<post_id>')
 def post(post_id):
-    try:
-        return render_template('base.html', post=Post.query.filter(Post.tag == post_id).one())
-    except Exception as e:
-        return render_template('error.html')
+    return render_template('base.html', post=Post.query.filter(Post.tag == post_id).one())
 
 
 @app.route('/favicon.ico')
 def favicon():
     return send_file('static/img/favicon.ico')
+
+
+@app.errorhandler(Exception)
+def handle_exception(e):
+    app.logger.exception(e)
+    return render_template('error.html')
