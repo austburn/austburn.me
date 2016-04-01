@@ -47,11 +47,7 @@ def about():
 
 @app.route('/posts')
 def posts():
-    all_posts = Post.query.all()
-    sort_by_date = lambda a, b: cmp(a.date, b.date)
-    all_posts.sort(cmp=sort_by_date, reverse=True)
-
-    return render_template('posts.html', posts=all_posts)
+    return render_template('posts.html', posts=Post.query.order_by(Post.date.desc()))
 
 
 @app.route('/posts/<post_id>')
