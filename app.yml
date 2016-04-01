@@ -36,7 +36,7 @@
       docker:
         name: austburn-prod
         image: austburn.prod
-        state: restarted
+        state: reloaded
         volumes:
           - /data/application:/application
           - /data/migrations:/migrations
