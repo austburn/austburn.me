@@ -1,4 +1,5 @@
 *.pyc
+*.retry
 bower_components/*
 env/*
 drafts/*
