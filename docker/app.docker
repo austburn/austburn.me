@@ -7,4 +7,6 @@ COPY requirements /requirements
 RUN pip install virtualenv
 RUN virtualenv /env
 RUN . /env/bin/activate; pip install -r /requirements
-CMD . /env/bin/activate && python /migrations/posts.py && python /application/runserver.py
+WORKDIR /application
+ENV PYTHONPATH /application
+CMD . /env/bin/activate && python migrations/posts.py && uwsgi --json uwsgi.json
