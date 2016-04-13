@@ -4,14 +4,14 @@ upstream flask {
 
 server {
     listen 80;
-    listen [::]:80;
+    listen {{ ansible_eth1.ipv4.address }}:80;
     server_name austburn.me;
     return 301 https://$server_name$request_uri;
 }
 
 server {
     listen 443 ssl;
-    listen [::]:443;
+    listen {{ ansible_eth1.ipv4.address }}:443;
     server_name austburn.me;
 
     ssl_certificate     /etc/ssl/certs/austburn.crt;
