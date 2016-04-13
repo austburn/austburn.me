@@ -1,6 +1,6 @@
 <p>For some time now, I have wanted to apply configuration management to my blog. It's been about a year since I first stood up my blog. I began
 with a cloud server, Nginx, and a static HTML page. From there, I graduated to a Python application with Postgres. The next obvious choice
-was to shim everything into Docker containers (yes, I was affected by the Great Container Obsession of 2014). During those transitions, I
+was to shim everything into Docker containers (yes, I was affected by the Great Container Obsession of 2014/15). During those transitions, I
 used scripts and .txt files to make things somewhat repeatable, but they still required my memory and manual intervention - both limited and
 error prone.</p>
 <p>While the changes I have made have not resulted in any large amounts of downtime, I have had to rush to make hot fixes - frantically debugging, grepping,
@@ -8,8 +8,8 @@ and trying to make sense of the situation. Everytime I wanted to add a post or e
 break anything? What if my server dies? Will I be able to stand this back up? How much downtime would it cause me? Even though this is a
 blog that receives a little amount of traffic, it's <em>my</em> blog - to those on the Interwebs, it serves as a direct representation of myself.</p>
 <p>The obvious answer was configuration management. Getting there is another story - that's what I'd like to share here. In this post I'll discuss the
-problems I had and how I remedied them. We'll start by talking about how you simplify what you are managing, how we can reliably configure our
-application, and how we can maintain it.</p>
+problems I had and how I remedied them. We'll start by talking about how you simplify what you are managing, how you can reliably configure your
+application, and how to can maintain it.</p>
 <h1>Simplify</h1>
 <p>Configuration management is largely about consistency - but we're not there, yet. Before you can leverage configuration management - do you have a
 workflow that works?</p>
@@ -21,7 +21,7 @@ useful. (It wasn't.)</p>
 <p>Where I was:</p>
 <ul>
     <li>My Docker container was bloated.</li>
-    <li>As a result, my dev flow was not extremely useful.</li>
+    <li>My dev flow was not extremely useful.</li>
     <li>Had my server died, I'd be at square one.</li>
 </ul>
 <p>Where I wanted to be:</p>
@@ -43,15 +43,15 @@ Docker images - 5 of which were application based while the latter was my databa
     <li>
         <strong>Nginx</strong>
         <ul>
-            <li><strong>Dev</strong>: Run on port 80, don't worry about certs, redirects, etc.</li>
-            <li><strong>Prod</strong>: Run on port 80/443, worry about certs, redirects, etc.</li>
+            <li><strong>dev</strong>: Run on port 80, don't worry about certs, redirects, etc.</li>
+            <li><strong>prod</strong>: Run on port 80/443, worry about certs, redirects, etc.</li>
         </ul>
     </li>
     <li>
         <strong>Application</strong>
         <ul>
-            <li><strong>Dev</strong>: Build from dev Nginx image</li>
-            <li><strong>Prod</strong>: Build from prod Nginx image</li>
+            <li><strong>dev</strong>: Build from dev Nginx image</li>
+            <li><strong>prod</strong>: Build from prod Nginx image</li>
         </ul>
     </li>
 </ul>
@@ -60,7 +60,7 @@ both server processes that close <code>stdin</code> and make debugging impossibl
 run the application outside the container. Wait... my database is inside a container, too... And I need that to run my application... Exactly.
 My dev flow was flawed. As a result, I only ever had so much faith in the changes I made. To be confident in the changes you make, you need
 a proper development flow.</p>
-<p>This is why I headered this section `Simplify`. The first step to configuration management is actually management. Can your application itself be
+<p>That is why I headered this section `Simplify`. The first step to configuration management is actually management. Can your application itself be
 managed? Does this make sense? Can I explain how it all works to a <a href="http://www.rubberduckdebugging.com/">rubber duck</a>?</p>
 <p>In my eyes, the source of my problems were largely my Docker images/containers. Ultimately, I decided to yank Nginx out of the container. Can you have Nginx
 and your application running inside a container? Of course. I decided to adhere more closely to the
@@ -68,7 +68,7 @@ and your application running inside a container? Of course. I decided to adhere 
 application. This accomplished a few things:</p>
 <ul>
     <li>Faster container builds</li>
-    <li>Less containers!</li>
+    <li>Less images!</li>
     <li><code>pdb</code> - <a href="https://docs.python.org/2/library/pdb.html">The Python Debugger</a> which I adore/abuse</li>
     <li>Reduced responsibilities for the container; reduced cognitive load</li>
     <li>More portable container - it's just my Python application and dependencies - it can be run the exact same way locally as on my server</li>
@@ -86,12 +86,13 @@ at Rackspace on Ansible and felt ready to try to apply the skills I had learned.
 <p><strong>This isn't Python</strong>. Well... Kinda. With LittleChef I'm used to finding a community cookbook, noticing that it solves 95% of usecases,
 writing a little Ruby for that 5% we need to tweak, and voil&agrave;. Starting out with Ansible, I haven't really looked at Galaxy
 or developing modules/plugins, but it seems there's not a quick and easy way to extend playbooks.</p>
+<p><strong>Syntax.</strong> Tailing on the above statement... Still not sold on YAML. Tasks being strings with key-value pairs takes a little
+getting used to.</p>
 <p><strong>Fast.</strong> I don't mean in the time that it takes to make changes on a remote host, but rather the time it takes to get started and make
-changes. Getting Docker and Nginx set up was pretty straightforward. Additionally, I used the git and Docker core modules to clone my repo and get my
-containers running. It is very easy to follow along with installation instructions and translate those to Ansible tasks.</p>
-<p><strong>Syntax.</strong> Still not sold on YAML. Tasks being strings with key-value pairs takes a little getting used to.</p>
-<p><strong>Docs.</strong> The Ansible documentation is great. Their guide is fantastic and includes all sorts of best practices. Additionally,
-I found the <code>ansible-doc</code> tool very helpful as a quick reference.</p>
+changes. Getting Docker and Nginx set up was pretty straightforward. Once you grasp the Ansible syntax, it becomes intuitive to take what you know
+about a service's installation and configuration and translate that to a playbook (maybe this counteracts my previous point).</p>
+<p><strong>Docs.</strong> The Ansible documentation is great. Their guide is fantastic and includes all sorts of best practices that make keeping
+track of all your resources manageable. Additionally, I found the <code>ansible-doc</code> tool very helpful as a quick reference.</p>
 <h2>Vault</h2>
 <p>Pretty much exactly like encrypted data bags in Chef, Vault is Ansible's offering to encrypt your sensitive data. It requires a password or
 secret file and a target file to encrypt.
@@ -109,5 +110,29 @@ with spending time remembering how everything works and how I can make that proc
 I had no [good] way of tracking the changes I had made and what problems my new changes might cause.</p>
 <p>Version control remedies this problem and provides ways to track and visualize the work you do. Not only does it provide tooling for maintaining, it
 provides evidence for any event that occurs. Whether the event is positive or negative - you have a track record to begin to understand the cause.</p>
-<p>While version control for a project in which you're a lone contributor of may seem unnecessary, I find it only beneficial. You're able to
+<p>While version control for a project which you're the lone contributor of may seem unnecessary, I find it only beneficial. You're able to
 track changes, scope changes into branches, and provide commentary to the changes you make.</p>
+<h1>Next Steps</h1>
+<p>Configuration management is a never ending battle. There will always be new tools, new ideas, and general changes that you make to your application
+that will force you to question how well your current solution works.</p>
+<h2>Docker Registry</h2>
+<p>I'll probably try to figure out a way to store my images somewhere. Currently, I have to checkout my entire Git repo to my node, it would be nice
+to just have to pull an image instead. Here, I could start tagging images as well - if I make a breaking change, I can revert to the previous image.</p>
+<h2>Git Hooks</h2>
+<p>Currently, I am still in charge of deploying any and all changes. If I go down the path of having a Docker registry, it'd be ideal to have merging
+a pull request trigger an image build and subsequently Ansible my node. I think I could accomplish this via CircleCI. Ultimately, I'll try to find
+something free.</p>
+<h2>Testing</h2>
+<p>I have constantly thought about this issue. How do I <em>really</em> know my changes are good? I would like to find a way to do this without having
+a test node. Essentially I give everything the eye test locally, but on the node itself is a different story. I think I can tie in some sort of check
+to my Ansible playbooks, but I'd have to look into this more. Basically, I need a way to safeguard myself from releasing a breaking change to my
+live site.</p>
+<h2>Monitoring</h2>
+<p>Currently I monitor my application via Rackspace, but I would like to add some custom metrics to understand what kind of load my Python application is
+receiving and if I can be proactive about problems. Additionally, I plan to learn more about Google Analytics and how I can leverage their platform
+to gather more information about vistors. Monitoring is more of a research project than an actionable task. You have to figure out what questions you
+need answers to before really implementing anything.</p>
+<h1>Conclusion</h1>
+<p>I hope this tale has provided you with some good information on why configuration management is important and how you can take steps to get there. I
+feel much more comfortable now with my blog, which I think will help me write more! If you have any comments or questions about my approach or
+application, feel free to reach out <a class="content-link" href="https://twitter.com/austburn">@austburn</a>!</p>
