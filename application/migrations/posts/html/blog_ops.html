@@ -1,0 +1,113 @@
+<p>For some time now, I have wanted to apply configuration management to my blog. It's been about a year since I first stood up my blog. I began
+with a cloud server, Nginx, and a static HTML page. From there, I graduated to a Python application with Postgres. The next obvious choice
+was to shim everything into Docker containers (yes, I was affected by the Great Container Obsession of 2014). During those transitions, I
+used scripts and .txt files to make things somewhat repeatable, but they still required my memory and manual intervention - both limited and
+error prone.</p>
+<p>While the changes I have made have not resulted in any large amounts of downtime, I have had to rush to make hot fixes - frantically debugging, grepping,
+and trying to make sense of the situation. Everytime I wanted to add a post or even make a cosmetic change, it was done with caution. Will this
+break anything? What if my server dies? Will I be able to stand this back up? How much downtime would it cause me? Even though this is a
+blog that receives a little amount of traffic, it's <em>my</em> blog - to those on the Interwebs, it serves as a direct representation of myself.</p>
+<p>The obvious answer was configuration management. Getting there is another story - that's what I'd like to share here. In this post I'll discuss the
+problems I had and how I remedied them. We'll start by talking about how you simplify what you are managing, how we can reliably configure our
+application, and how we can maintain it.</p>
+<h1>Simplify</h1>
+<p>Configuration management is largely about consistency - but we're not there, yet. Before you can leverage configuration management - do you have a
+workflow that works?</p>
+<p>I didn't.</p>
+<p>I had a hundred line text file that contained instructions for how to get my blog running on a cloud server from scratch along with a handful of
+scripts that really just helped me run my application, not provision my server. I decline to comment on whether or not that text file was even
+useful. (It wasn't.)</p>
+<p>As a first step, I took a look at what I had and where I wanted to be.</p>
+<p>Where I was:</p>
+<ul>
+    <li>My Docker container was bloated.</li>
+    <li>As a result, my dev flow was not extremely useful.</li>
+    <li>Had my server died, I'd be at square one.</li>
+</ul>
+<p>Where I wanted to be:</p>
+<ul>
+    <li>Simple Docker workflow.</li>
+    <li>Debugging capabilities.</li>
+    <li>Clear division of responbility.</li>
+</ul>
+<p>Here is my Docker experience summed up into two memes (I have interchanged which one comes first multiple times):</p>
+<div style="text-align:center;">
+    <img src="https://bookloversunite.files.wordpress.com/2014/10/do-all-the-things.jpeg" style="width:30%;">
+    <img src="http://engineering.viki.com/images/blog/docker_all_the_things.jpg" style="width:30%;">
+</div>
+<p>What I mean is that my experience with Docker was initially immature. I wasn't really sure what it was best used for, so I used it for just about
+everything. As I continually made changes to my blog, it seemed as though I was also adding more complexity to my container. As a result, I had 6
+Docker images - 5 of which were application based while the latter was my database. The 5 application images consisted of:</p>
+<ul>
+    <li><strong>base</strong>: install common dependencies (Python, pip, etc.)</li>
+    <li>
+        <strong>Nginx</strong>
+        <ul>
+            <li><strong>Dev</strong>: Run on port 80, don't worry about certs, redirects, etc.</li>
+            <li><strong>Prod</strong>: Run on port 80/443, worry about certs, redirects, etc.</li>
+        </ul>
+    </li>
+    <li>
+        <strong>Application</strong>
+        <ul>
+            <li><strong>Dev</strong>: Build from dev Nginx image</li>
+            <li><strong>Prod</strong>: Build from prod Nginx image</li>
+        </ul>
+    </li>
+</ul>
+<p>The problem I had here was: development was slow and not very helpful. I was always indirectly running my Python application via Nginx/uWSGI -
+both server processes that close <code>stdin</code> and make debugging impossible. If there was a problem with the application itself, I had to
+run the application outside the container. Wait... my database is inside a container, too... And I need that to run my application... Exactly.
+My dev flow was flawed. As a result, I only ever had so much faith in the changes I made. To be confident in the changes you make, you need
+a proper development flow.</p>
+<p>This is why I headered this section `Simplify`. The first step to configuration management is actually management. Can your application itself be
+managed? Does this make sense? Can I explain how it all works to a <a href="http://www.rubberduckdebugging.com/">rubber duck</a>?</p>
+<p>In my eyes, the source of my problems were largely my Docker images/containers. Ultimately, I decided to yank Nginx out of the container. Can you have Nginx
+and your application running inside a container? Of course. I decided to adhere more closely to the
+<a href="http://www.catb.org/esr/writings/taoup/html/ch01s06.html">Unix philosophy</a> and have my container do one thing and do it well - my Python
+application. This accomplished a few things:</p>
+<ul>
+    <li>Faster container builds</li>
+    <li>Less containers!</li>
+    <li><code>pdb</code> - <a href="https://docs.python.org/2/library/pdb.html">The Python Debugger</a> which I adore/abuse</li>
+    <li>Reduced responsibilities for the container; reduced cognitive load</li>
+    <li>More portable container - it's just my Python application and dependencies - it can be run the exact same way locally as on my server</li>
+</ul>
+<p>At this point, I felt comfortable moving forward. Now, I just need to get Docker, Nginx, and my image to a server.</p>
+
+<h1>Ansible</h1>
+<p>As I began to weigh my options of which configuration management solution to choose, I picked Ansible mainly out of interest. At
+<a href="https://mycloud.rackspace.com">Rackspace</a> we use <a href="https://github.com/tobami/littlechef">LittleChef</a>. Like Ansible, LittleChef uses
+a push model ("Hey, I have some changes for you, here they are.") for infrastructure changes. While using something like
+<a href="https://downloads.chef.io/chef-server/">Chef Server</a> would expose me to a pull model ("Hey boss, any changes you need me to make?"), I
+figured it might be a little overkill and LittleChef has already introduced me to some of the Chef philosophies. I had also just taken a class
+at Rackspace on Ansible and felt ready to try to apply the skills I had learned.</p>
+<h2>First Impressions</h2>
+<p><strong>This isn't Python</strong>. Well... Kinda. With LittleChef I'm used to finding a community cookbook, noticing that it solves 95% of usecases,
+writing a little Ruby for that 5% we need to tweak, and voil&agrave;. Starting out with Ansible, I haven't really looked at Galaxy
+or developing modules/plugins, but it seems there's not a quick and easy way to extend playbooks.</p>
+<p><strong>Fast.</strong> I don't mean in the time that it takes to make changes on a remote host, but rather the time it takes to get started and make
+changes. Getting Docker and Nginx set up was pretty straightforward. Additionally, I used the git and Docker core modules to clone my repo and get my
+containers running. It is very easy to follow along with installation instructions and translate those to Ansible tasks.</p>
+<p><strong>Syntax.</strong> Still not sold on YAML. Tasks being strings with key-value pairs takes a little getting used to.</p>
+<p><strong>Docs.</strong> The Ansible documentation is great. Their guide is fantastic and includes all sorts of best practices. Additionally,
+I found the <code>ansible-doc</code> tool very helpful as a quick reference.</p>
+<h2>Vault</h2>
+<p>Pretty much exactly like encrypted data bags in Chef, Vault is Ansible's offering to encrypt your sensitive data. It requires a password or
+secret file and a target file to encrypt.
+I followed the <a href="http://docs.ansible.com/ansible/playbooks_vault.html#running-a-playbook-with-vault">documentation</a> on
+how to get started with Vault and
+used <a href="http://docs.ansible.com/ansible/playbooks_best_practices.html#best-practices-for-variables-and-vaults">this</a> guide on best practices
+to setup my variables correctly in conjunction with Vault. I used Vault to encrypt my SSL cert/key and my Postgres credentials.</p>
+<p>Once I had cleaned up my application, the next step was to get everything into version control. By encrypting the sensitive bits, I can
+confidently store everything in version control aside from my secret file containing my Vault password. This makes development possible from
+pretty much anywhere provided you store your secret file in a safe location.</p>
+<h1>Version Control</h1>
+<p>Getting started with blogging has been a slowly evolving adventure. Along with work, constantly trying to learn something new, and trying to discover
+what I want this blog to become, making updates has ultimately become an infrequent and adaptive process. Each new blog post seems to coincide
+with spending time remembering how everything works and how I can make that process better. Fixing things resulted in more time spent understanding.
+I had no [good] way of tracking the changes I had made and what problems my new changes might cause.</p>
+<p>Version control remedies this problem and provides ways to track and visualize the work you do. Not only does it provide tooling for maintaining, it
+provides evidence for any event that occurs. Whether the event is positive or negative - you have a track record to begin to understand the cause.</p>
+<p>While version control for a project in which you're a lone contributor of may seem unnecessary, I find it only beneficial. You're able to
+track changes, scope changes into branches, and provide commentary to the changes you make.</p>

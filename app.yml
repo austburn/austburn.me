@@ -19,7 +19,7 @@
       git: repo=git@github.com:austburn/austburn.me.git dest=/data/
 
     - name: build prod container
-      command: make prod-img
+      command: make img
       args:
         chdir: /data
 
@@ -35,11 +35,10 @@
     - name: start application
       docker:
         name: austburn-prod
-        image: austburn.prod
+        image: austburn.app
         state: reloaded
         volumes:
           - /data/application:/application
-          - /data/migrations:/migrations
         links:
           - postgres:postgres
         ports:
