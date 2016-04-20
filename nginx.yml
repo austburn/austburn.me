@@ -1,13 +1,27 @@
 ---
 - name: configure nginx
   hosts: webservers
+  become: true
+  become_user: root
 
   tasks:
-    - name: add cert
-      template: src=templates/austburn_crt.j2 dest=/etc/ssl/certs/austburn.crt owner=root mode=0600
+    - name: install bc/git
+      apt: name={{ item }} state=present
+      with_items:
+        - bc
+        - git
 
-    - name: add key
-      template: src=templates/austburn_key.j2 dest=/etc/ssl/private/austburn.key owner=root mode=0600
+    - name: rax dns
+      lineinfile: dest=/etc/resolv.conf state=present line="nameserver {{ item }}" create=yes
+      with_items:
+        - dns1.stabletransit.com
+        - dns2.stabletransit.com
+
+    - name: grab lets-encrpyt
+      git: repo=https://github.com/letsencrypt/letsencrypt dest=/opt/letsencrypt
+
+    - name: grab certs
+      command: ./letsencrypt-auto certonly --agree-tos --renew-by-default --email austburn@gmail.com --standalone -d austburn.me chdir=/opt/letsencrypt
 
     - name: install nginx
       apt: name=nginx state=present
