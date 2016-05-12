@@ -1,0 +1,5 @@
+---
+- name: grab certs
+  command: ./letsencrypt-auto certonly --non-interactive --agree-tos --keep-until-expiring --email austburn@gmail.com --standalone --pre-hook "service nginx stop" --post-hook "service nginx start" -d austburn.me chdir=/opt/letsencrypt
+- include: nginx.yml
+- include: app.yml

@@ -1,0 +1,9 @@
+---
+- name: rax dns
+  lineinfile: "dest=/etc/resolv.conf state=present line='nameserver {{ item }}' create=yes"
+  with_items:
+    - dns1.stabletransit.com
+    - dns2.stabletransit.com
+
+- name: grab lets-encrpyt
+  git: repo=https://github.com/letsencrypt/letsencrypt dest=/opt/letsencrypt

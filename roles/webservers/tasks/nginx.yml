@@ -1,0 +1,15 @@
+---
+- name: install nginx
+  apt: name=nginx state=present
+
+- name: link nginx config
+  file: path=/etc/nginx/sites-enabled/default state=absent
+
+- name: add nginx config
+  template: src=templates/nginx.j2 dest=/etc/nginx/sites-available/austburn.conf
+
+- name: link nginx config
+  file: src=/etc/nginx/sites-available/austburn.conf dest=/etc/nginx/sites-enabled/austburn.conf state=link
+
+- name: restart nginx
+  service: name=nginx state=restarted

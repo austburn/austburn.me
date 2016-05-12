@@ -1,0 +1,39 @@
+---
+- name: data directory
+  become: true
+  become_user: root
+  file: dest=/data/ state=directory mode=0770 owner=root group=austin
+
+- name: git
+  git: repo=git@github.com:austburn/austburn.me.git dest=/data/
+
+- name: build prod container
+  command: make img
+  args:
+    chdir: /data
+
+- name: start postgres
+  docker:
+    name: postgres
+    image: postgres
+    state: started
+    env:
+      POSTGRES_USER: "{{ pg_user }}"
+      POSTGRES_PASSWORD: "{{ pg_password }}"
+
+- name: start application
+  docker:
+    name: austburn-prod
+    image: austburn.app
+    state: reloaded
+    restart_policy: always
+    volumes:
+      - /data/application:/application
+    links:
+      - postgres:postgres
+    ports:
+      - 127.0.0.1:5050:5050
+    expose: 5050
+    env:
+      POSTGRES_USER: "{{ pg_user }}"
+      POSTGRES_PASSWORD: "{{ pg_password }}"

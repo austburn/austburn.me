@@ -1,0 +1,45 @@
+---
+# sets up the docker registry
+
+- name: grab certs
+  command: ./letsencrypt-auto certonly --non-interactive --agree-tos --keep-until-expiring --email austburn@gmail.com --cert-path ~/certs --standalone -d registry.austburn.me
+  args:
+    chdir: /opt/letsencrypt
+
+- name: create cert directory
+  file: path=/home/austin/certs state=directory
+
+- name: copy certs
+  command: cp /etc/letsencrypt/live/registry.austburn.me/{{ item }} /home/austin/certs
+  with_items:
+    - fullchain.pem
+    - privkey.pem
+
+- name: setup input rules iptables
+  iptables: chain=INPUT destination={{ ansible_eth1.ipv4.address }} destination_port=5000 protocol=tcp source={{ hostvars[item].ansible_host }}
+  with_items:
+    - "{{ groups['webservers'] }}"
+
+- name: install htpasswd
+  apt: name=apache2-utils state=present
+
+- name: htpasswd
+  command: htpasswd -bcB /home/austin/htpasswd {{ docker_user }} {{ docker_password }}
+
+- name: start registry
+  docker:
+    name: registry
+    image: registry:2
+    state: started
+    restart_policy: always
+    volumes:
+      - /home/austin/certs:/certs
+      - /home/austin/htpasswd:/auth/htpasswd
+    ports:
+      - "{{ ansible_eth1.ipv4.address }}:5000:5000"
+    env:
+      REGISTRY_HTTP_TLS_CERTIFICATE: /certs/fullchain.pem
+      REGISTRY_HTTP_TLS_KEY: /certs/privkey.pem
+      REGISTRY_AUTH: htpasswd
+      REGISTRY_AUTH_HTPASSWD_PATH: /auth/htpasswd
+      REGISTRY_AUTH_HTPASSWD_REALM: Registry Realm

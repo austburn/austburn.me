@@ -1,0 +1,9 @@
+---
+- name: Install docker and registry
+  hosts: registry
+  become: true
+  become_user: root
+
+  roles:
+    - common
+    - registry
