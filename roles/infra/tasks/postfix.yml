@@ -1,0 +1,17 @@
+---
+# setup postfix
+
+- name: Set Postfix option type as internet site
+  debconf: name=postfix question="postfix/main_mailer_type" value="'Internet Site'" vtype="string"
+
+- name: Set Postfix option hostname
+  debconf: name=postifx question="postfix/mailname" value="infra.austburn.me" vtype="string"
+
+- name: install postfix
+  apt: name=postfix state=present
+
+- name: add postifx config
+  copy: src=files/postfix.cfg dest=/etc/postfix/main.cf
+
+- name: restart postfix
+  service: name=postfix state=restarted

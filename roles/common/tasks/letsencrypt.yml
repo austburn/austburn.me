@@ -7,3 +7,6 @@
 
 - name: grab lets-encrpyt
   git: repo=https://github.com/letsencrypt/letsencrypt dest=/opt/letsencrypt
+
+- name: grab certs
+  command: ./letsencrypt-auto certonly --non-interactive --agree-tos --keep-until-expiring --email austburn@gmail.com --standalone {{ letsencrypt_hooks }} -d {{ letsencrypt_domain }} chdir=/opt/letsencrypt

@@ -4,12 +4,13 @@ RUN apt-get update && apt-get -y install python-dev python-pip libffi-dev \
                                           libpcre3 libpcre3-dev libjansson4 libjansson-dev \
                                           python-psycopg2 libpq-dev
 
-COPY docker/requirements /requirements
-RUN pip install virtualenv
-RUN virtualenv /env
-RUN . /env/bin/activate; pip install -r /requirements
 
 WORKDIR /application
 COPY application /application
+
+RUN pip install virtualenv
+RUN virtualenv /env
+RUN . /env/bin/activate; pip install -r /application/requirements
+
 ENV PYTHONPATH /application
 CMD . /env/bin/activate && python migrations/posts.py && uwsgi --json uwsgi.json

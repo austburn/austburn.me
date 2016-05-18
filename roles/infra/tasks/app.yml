@@ -1,0 +1,25 @@
+---
+- name: data directory
+  file: dest=/data/ state=directory mode=0770 owner=root group=austin
+
+- name: git
+  become: true
+  become_user: austin
+  git: repo=git@github.com:austburn/austburn.me.git dest=/data/
+
+- name: build infra image
+  become: true
+  become_user: austin
+  command: make infra-img
+  args:
+    chdir: /data
+
+- name: start infra
+  become: true
+  become_user: austin
+  docker:
+    name: infra
+    image: austburn.infra
+    state: started
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock

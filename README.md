@@ -9,7 +9,7 @@ Here are some operational tasks for bootstrapping a node.
 
 ## Bootstrap
 
-`ansible-playbook bootstrap.yml`
+`ansible-playbook bootstrap.yml --limit node_name`
 ```
 node_name ansible_user=root ansible_host=ip
 ```

@@ -1,11 +1,4 @@
 ---
-# sets up the docker registry
-
-- name: grab certs
-  command: ./letsencrypt-auto certonly --non-interactive --agree-tos --keep-until-expiring --email austburn@gmail.com --cert-path ~/certs --standalone -d registry.austburn.me
-  args:
-    chdir: /opt/letsencrypt
-
 - name: create cert directory
   file: path=/home/austin/certs state=directory
 

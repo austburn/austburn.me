@@ -1,18 +1,22 @@
 ---
 - name: data directory
-  become: true
-  become_user: root
   file: dest=/data/ state=directory mode=0770 owner=root group=austin
 
 - name: git
+  become: true
+  become_user: austin
   git: repo=git@github.com:austburn/austburn.me.git dest=/data/
 
 - name: build prod container
+  become: true
+  become_user: austin
   command: make img
   args:
     chdir: /data
 
 - name: start postgres
+  become: true
+  become_user: austin
   docker:
     name: postgres
     image: postgres
@@ -22,6 +26,8 @@
       POSTGRES_PASSWORD: "{{ pg_password }}"
 
 - name: start application
+  become: true
+  become_user: austin
   docker:
     name: austburn-prod
     image: austburn.app

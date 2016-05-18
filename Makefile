@@ -3,6 +3,9 @@ default: dev
 img:
 	docker build --tag austburn.app --file docker/app.docker .
 
+infra-img:
+	docker build --tag austburn.infra --file docker/infra.docker .
+
 dev: img
 	docker run --rm --interactive --tty \
 			   --publish 5050:5050 \

@@ -1,0 +1,9 @@
+---
+- name: Install git webhooks infrastructure
+  hosts: infra
+  become: true
+  become_user: root
+
+  roles:
+    - common
+    - infra

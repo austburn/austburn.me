@@ -3,3 +3,5 @@ pg_user: "{{ vault_pg_user }}"
 pg_password: "{{ vault_pg_password }}"
 private_key: "/etc/letsencrypt/live/austburn.me/privkey.pem"
 cert: "/etc/letsencrypt/live/austburn.me/fullchain.pem"
+letsencrypt_domain: austburn.me
+letsencrypt_hooks: '--pre-hook "service nginx stop" --post-hook "service nginx start"'
