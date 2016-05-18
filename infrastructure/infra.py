@@ -13,7 +13,7 @@ app.logger.addHandler(handler)
 def post():
     json_body = request.get_json()
     app.logger.info(json_body)
-    return 200
+    return '', 200
 
 # Repo.clone_from('git@github.com:austburn/austburn.me.git', '/home/austin/austburn.me')
 # cli = Client(base_url='unix://var/run/docker.sock')
