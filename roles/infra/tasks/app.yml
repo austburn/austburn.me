@@ -5,7 +5,7 @@
 - name: git
   become: true
   become_user: austin
-  git: repo=git@github.com:austburn/austburn.me.git dest=/data/
+  git: repo=git@github.com:austburn/austburn.me.git dest=/data/ version=docker-registry
 
 - name: build infra image
   become: true
@@ -21,5 +21,8 @@
     name: infra
     image: austburn.infra
     state: started
+    restart_policy: always
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - 127.0.0.1:5050:5050

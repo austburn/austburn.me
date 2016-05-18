@@ -8,3 +8,6 @@ COPY infrastructure /infrastructure
 RUN pip install virtualenv
 RUN virtualenv /env
 RUN . /env/bin/activate; pip install -r /infrastructure/requirements
+
+ENV PYTHONPATH /application
+CMD . /env/bin/activate && uwsgi --json uwsgi.json

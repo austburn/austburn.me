@@ -1,3 +1,4 @@
 ---
 - include: docker.yml
 - include: letsencrypt.yml
+- include: nginx.yml
