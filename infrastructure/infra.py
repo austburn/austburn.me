@@ -9,7 +9,7 @@ handler = FileHandler('/var/log/infra.log')
 app.logger.addHandler(handler)
 
 
-@app.route('/post')
+@app.route('/post', methods=['POST'])
 def post():
     json_body = request.get_json()
     app.logger.info(json_body)
