@@ -21,8 +21,6 @@
     password: "{{ docker_password }}"
     state: reloaded
     restart_policy: always
-    volumes:
-      - /data/application:/application
     links:
       - postgres:postgres
     ports:
