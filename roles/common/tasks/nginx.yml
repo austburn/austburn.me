@@ -1,15 +1,15 @@
 ---
+- name: add nginx signing key
+  apt_key: url=http://nginx.org/keys/nginx_signing.key state=present
+
+- name: add nginx repos
+  lineinfile: dest=/etc/apt/sources.list state=present line="{{ item }}"
+  with_items:
+    - "deb http://nginx.org/packages/ubuntu/ trusty nginx"
+    - "deb-src http://nginx.org/packages/ubuntu/ trusty nginx"
+
 - name: install nginx
-  apt: name=nginx state=present
+  apt: name=nginx=1.10.0-1~trusty update_cache=yes state=present
 
-- name: link nginx config
+- name:  remove default nginx config
   file: path=/etc/nginx/sites-enabled/default state=absent
-
-- name: add nginx config
-  template: src=templates/nginx.j2 dest=/etc/nginx/sites-available/austburn.conf
-
-- name: link nginx config
-  file: src=/etc/nginx/sites-available/austburn.conf dest=/etc/nginx/sites-enabled/austburn.conf state=link
-
-- name: restart nginx
-  service: name=nginx state=restarted

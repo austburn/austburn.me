@@ -9,3 +9,9 @@ dependencies:
 test:
   override:
     - make test
+
+deployment:
+  master:
+    branch: master
+    commands:
+      - docker login -e $QUAY_EMAIL -u $QUAY_USERNAME -p $QUAY_PASSWORD quay.io

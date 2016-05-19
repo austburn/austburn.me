@@ -1,0 +1,15 @@
+---
+- name:  remove default nginx config
+  file: path=/etc/nginx/sites-enabled/default state=absent
+
+- name: add nginx config
+  template: src=templates/nginx.j2 dest=/etc/nginx/nginx.conf
+
+- name: install htpasswd
+  apt: name=apache2-utils state=present
+
+- name: htpasswd
+  command: htpasswd -bcB /etc/nginx/conf.d/nginx.htpasswd {{ docker_user }} {{ docker_password }}
+
+- name: restart nginx
+  service: name=nginx state=restarted

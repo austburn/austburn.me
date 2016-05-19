@@ -1,0 +1,21 @@
+---
+- name: setup input rules iptables
+  iptables: chain=INPUT destination={{ ansible_eth0.ipv4.address }} destination_port=5000 protocol=tcp
+
+- name: start registry
+  docker:
+    name: registry
+    image: registry:2
+    state: reloaded
+    restart_policy: always
+    volumes:
+      - /home/austin/certs:/certs
+      - /etc/nginx/conf.d/nginx.htpasswd:/auth/htpasswd
+    ports:
+      - 127.0.0.1:5000:5000
+    env:
+      REGISTRY_HTTP_TLS_CERTIFICATE: /certs/fullchain.pem
+      REGISTRY_HTTP_TLS_KEY: /certs/privkey.pem
+      REGISTRY_AUTH: htpasswd
+      REGISTRY_AUTH_HTPASSWD_PATH: /auth/htpasswd
+      REGISTRY_AUTH_HTPASSWD_REALM: Registry Realm

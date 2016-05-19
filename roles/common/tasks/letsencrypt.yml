@@ -10,3 +10,12 @@
 
 - name: grab certs
   command: ./letsencrypt-auto certonly --non-interactive --agree-tos --keep-until-expiring --email austburn@gmail.com --standalone {{ letsencrypt_hooks }} -d {{ domain }} chdir=/opt/letsencrypt
+
+- name: create cert directory
+  file: path=/home/austin/certs state=directory
+
+- name: copy certs
+  command: cp /etc/letsencrypt/live/{{ domain }}/{{ item }} /home/austin/certs
+  with_items:
+    - fullchain.pem
+    - privkey.pem
