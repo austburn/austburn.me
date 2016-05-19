@@ -4,7 +4,8 @@ img:
 	docker build --tag austburn.app --file docker/app.docker .
 
 dev: img
-	docker run --rm --interactive --tty \
+	docker run --interactive --tty \
+			   --restart always \
 			   --publish 5050:5050 \
 			   --link postgres:postgres \
 			   --name austburn-dev austburn.app bash -c "source /env/bin/activate && python migrations/posts.py && python runserver.py"
