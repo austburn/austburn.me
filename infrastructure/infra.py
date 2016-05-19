@@ -15,7 +15,7 @@ def post():
     Repo.clone_from('git@github.com:austburn/austburn.me.git', '/data/')
     cli = Client(base_url='unix://var/run/docker.sock')
 
-    with f as open('/data/docker/app.docker'):
+    with open('/data/docker/app.docker') as f:
         try:
             response = [
                 line for line in cli.build(
