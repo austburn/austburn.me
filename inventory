@@ -1,6 +1,10 @@
 austburn.1.me ansible_user=austin ansible_host=162.209.103.88
-austburn.2.me ansible_user=root ansible_host=162.209.99.124
+austburn.2.me ansible_user=austin ansible_host=162.209.99.124
+austburn.registry ansible_user=austin ansible_host=162.209.103.70
 
 [webservers]
 austburn.1.me
 austburn.2.me
+
+[registry]
+austburn.registry
