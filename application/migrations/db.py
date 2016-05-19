@@ -22,6 +22,8 @@ finally:
 
 metadata = MetaData(bind=engine)
 Base = declarative_base(metadata=metadata)
+
+
 class Post(Base):
     __tablename__ = 'posts'
 

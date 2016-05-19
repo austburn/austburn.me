@@ -1,0 +1,7 @@
+dependencies:
+  override:
+    - make img
+
+test:
+  override:
+    - make test

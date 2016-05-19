@@ -10,7 +10,10 @@ app.logger.addHandler(handler)
 
 @app.route('/')
 def index():
-    return render_template('base.html', post=session.query(Post).order_by(Post.date.desc()).first())
+    return render_template(
+        'base.html',
+        post=session.query(Post).order_by(Post.date.desc()).first()
+    )
 
 
 @app.route('/about')
@@ -20,12 +23,18 @@ def about():
 
 @app.route('/posts')
 def posts():
-    return render_template('posts.html', posts=session.query(Post).order_by(Post.date.desc()))
+    return render_template(
+        'posts.html',
+        posts=session.query(Post).order_by(Post.date.desc())
+    )
 
 
 @app.route('/posts/<post_id>')
 def post(post_id):
-    return render_template('base.html', post=session.query(Post).filter(Post.tag == post_id).one())
+    return render_template(
+        'base.html',
+        post=session.query(Post).filter(Post.tag == post_id).one()
+    )
 
 
 @app.route('/favicon.ico')

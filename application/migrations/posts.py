@@ -11,12 +11,15 @@ for post in posts:
 
         tag = string.rstrip(post, '.yml')
         date = datetime(**yaml_obj.get('date'))
-
-        with open(os.path.join('migrations/posts/html', yaml_obj.get('post')), 'r') as f:
+        post_file = yaml_obj.get('post')
+        with open(os.path.join('migrations/posts/html',  post_file), 'r') as f:
             post_content = f.read()
             if session.query(Post).filter(Post.tag == tag).count():
-                session.execute(Post.__table__.update().where(Post.tag == tag), {'post': post_content})
+                session.execute(
+                    Post.__table__.update().where(Post.tag == tag), {'post': post_content})
             else:
-                session.add(Post(tag=tag, title=yaml_obj.get('title'), date=date, gist=yaml_obj.get('gist'), post=post_content))
+                session.add(
+                    Post(tag=tag, title=yaml_obj.get('title'), date=date, gist=yaml_obj.get('gist'), post=post_content)
+                )
 
 session.commit()
