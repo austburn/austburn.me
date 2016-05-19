@@ -14,6 +14,6 @@ deployment:
   master:
     branch: master
     commands:
-      - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD https://registry.austburn.me
+      - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASSWORD https://registry.austburn.me
       - docker build --tag austburn.me/austburn.app:$CIRCLE_SHA1 --file ./docker/app.docker .
       - docker push austburn.me/austburn.app
