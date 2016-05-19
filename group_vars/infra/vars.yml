@@ -1,3 +1,0 @@
----
-domain: infra.austburn.me
-letsencrypt_hooks: '--pre-hook "service nginx stop" --post-hook "service nginx start"'
