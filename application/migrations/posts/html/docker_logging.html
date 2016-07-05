@@ -1,0 +1,36 @@
+<p>In the past year or so, the way we think about containers and our infrastructure has undergone a makeover. Operationally, there is a wide spectrum for
+how you run your Docker application. First, we have the, "I want to use Docker, but I'm not sure about all this Kubernetes/Swarm/Mesos/etc. stuff," mindset. This
+is what I would consider the first step towards containers is. You want to leverage the isolation of the Docker container, but you'll still use a traditional host and
+configuration management to install Docker on the host and run the intended container(s). Several steps later you may decide that a container orchestration tool
+would solve a lot of your problems and make life easier. Many of these tools isolate the container from the physical host requiring you to potentially think
+differently about container. One thought you should not let go to the back burner is logging. Having thoroughly investigated how to gather logs from our Docker containers
+at work, I wanted to share my findings and thoughts on how you should handle your container logs.</p>
+<h1>The First Attempt</h1>
+<p>My team's first attempts at Docker were what I alluded to earlier as the first step towards containers. We wanted to have this container that isolated all of our
+application specific dependencies, install Docker on our servers, and ship our latest container there (we used Git's merge commit hash to tag containers). One of the
+earliest bump in the road was logging. We use ELK for logging. We install Logstash on every host and have it ship logs we find interesting. Not wanting to invest too
+much time in logging when we had a solution that worked, we decided to hijack <code>/var/log</code> for our Docker container. We mounted that host directory in the
+container to persist our logs on the host and allow Logstash to run as is does on every other host. Maybe it's not the most glorious solution, but it works and
+we're using Docker in production.</p>
+<h1>Portability: Rethinking How We Log</h1>
+<p>I think any team that is running containers will ask themselves if a container orchestration tool is something that they're interested in investing time and efforts
+into. In our case, regardless of if we wanted to use those tools or not, the question of portability came up. From an application standpoint, our container has no
+external dependencies outside of Docker. From an operational standpoint, we still need Logstash.</p>
+<p>We began to think of ways to make our container more portable. Putting Logstash inside of our container was an option, but that just seemed nasty. We didn't
+need Java and it blurs the responsibilties of the container. As you begin your journey into containers, you start to realize that the answer to your problem often
+involves more containers. We began to investigate our options for handling options in a second container.</p>
+<div style="text-align:center;">
+    <img src="https://i.makeagif.com/media/5-05-2014/zAfH3e.gif" style="width:30%;">
+    <div class="caption">Me thinking about our logs.</div>
+</div>
+<h2>Logspout</h2>
+<p>I would say in most use cases, <a href="https://github.com/gliderlabs/logspout">Logspout</a> will probably alleviate solve your logging problems. It is a small container
+that you run on your host that accepts logs from the <code>stdout</code> of the other containers running on the host and will route your logs. There are modules available
+to meet your needs and loggin environment. There is even a <a href="https://github.com/looplab/logspout-logstash">Logstash module</a>.</p>
+<p>Unfortunately, Logspout did not solve our problems. For one, <code>stdout</code> is the only stream for the logs to flow through. If you have more than one type
+of log coming from your container, which we did, you have to generate a Logstash configuration that handles this. One of Logstash's weaknesses is that it's conditional
+constructs are not extensive and often lead to multiple if-else statements with cryptic conditionals. Second, which is definitely preference based, is that you lose the
+phyiscal log file. In one regard, you don't have to worry about log rotation and retention, but you're really relying on your logging infrastructure to be highly
+available and reliable.</p>
+<h2>Data Container with Logstash</h2>
+<p>After doing some research, we found a way to use Logstash as we had traditionally used it, but inside a container.</p>

@@ -187,3 +187,7 @@ i {
   background-color: rgba(180, 221, 253, 0.7);
   border-radius: 6px;
 }
+
+.caption {
+  font-size: small;
+}
