@@ -1,36 +1,109 @@
-<p>In the past year or so, the way we think about containers and our infrastructure has undergone a makeover. Operationally, there is a wide spectrum for
-how you run your Docker application. First, we have the, "I want to use Docker, but I'm not sure about all this Kubernetes/Swarm/Mesos/etc. stuff," mindset. This
-is what I would consider the first step towards containers is. You want to leverage the isolation of the Docker container, but you'll still use a traditional host and
-configuration management to install Docker on the host and run the intended container(s). Several steps later you may decide that a container orchestration tool
-would solve a lot of your problems and make life easier. Many of these tools isolate the container from the physical host requiring you to potentially think
-differently about container. One thought you should not let go to the back burner is logging. Having thoroughly investigated how to gather logs from our Docker containers
-at work, I wanted to share my findings and thoughts on how you should handle your container logs.</p>
-<h1>The First Attempt</h1>
-<p>My team's first attempts at Docker were what I alluded to earlier as the first step towards containers. We wanted to have this container that isolated all of our
-application specific dependencies, install Docker on our servers, and ship our latest container there (we used Git's merge commit hash to tag containers). One of the
-earliest bump in the road was logging. We use ELK for logging. We install Logstash on every host and have it ship logs we find interesting. Not wanting to invest too
-much time in logging when we had a solution that worked, we decided to hijack <code>/var/log</code> for our Docker container. We mounted that host directory in the
-container to persist our logs on the host and allow Logstash to run as is does on every other host. Maybe it's not the most glorious solution, but it works and
-we're using Docker in production.</p>
-<h1>Portability: Rethinking How We Log</h1>
-<p>I think any team that is running containers will ask themselves if a container orchestration tool is something that they're interested in investing time and efforts
-into. In our case, regardless of if we wanted to use those tools or not, the question of portability came up. From an application standpoint, our container has no
-external dependencies outside of Docker. From an operational standpoint, we still need Logstash.</p>
-<p>We began to think of ways to make our container more portable. Putting Logstash inside of our container was an option, but that just seemed nasty. We didn't
-need Java and it blurs the responsibilties of the container. As you begin your journey into containers, you start to realize that the answer to your problem often
-involves more containers. We began to investigate our options for handling options in a second container.</p>
+<p>In the past couple years, the way we think about our infrastructure has undergone a makeover. Without a doubt, the biggest shift in operations and infrastructure has
+been towards containers. As a result, we've been forced to question the way we do infrastructure. Before containers, you're "deliverable" was the application itself. Your
+configuration management tools would provision your host to be able to run that application. With containers, you're "deliverable" is, well, the container. Your
+configuration management tools need to... install Docker, rkt, etc. This realization has fueled the container orchestration tools to challenge the way we think
+about hosts and what we expect from them. One of the more challenging problems my team has faced has been getting logging right, especially as you begin to look
+at container orchestration solutions, many of which don't grant access to the host. In this post I plan to talk about our journey to getting logging right (for us) and
+why many of the existing solutions didn't work for our use case.</p>
+<p>Shifting to containers for our team has been an extended learning process. Operationally, we viewed containers as an opportunity to improve our processes and
+challenge ourselves as engineers. We also had just been assigned a new project, so we had some time to experiment and work out the kinks. Our first foray into
+Docker could best be summed up as, "Let's use Docker, but what the heck is all this Kubernetes/Swarm/Mesos business and why would we need it?" By this, I mean
+that our initial focus was on how to get our application into a Docker container and how do we get it from dev to production in a way that makes sense. We had
+a pipeline set up to build our container, ship it to <a href="https://quay.io/">Quay</a>, then use Chef to pull the correct container and start it... <em>what
+about the logs?</em>.</p>
 <div style="text-align:center;">
     <img src="https://i.makeagif.com/media/5-05-2014/zAfH3e.gif" style="width:30%;">
     <div class="caption">Me thinking about our logs.</div>
 </div>
+<h1>Making It Work</h1>
+<p>As I stated previously, we weren't initially invested in the nuances of containers and really just wanted to get things working. Inside our container, we were logging
+to files, just as we would had we been on the host. We use the <a href="https://www.elastic.co/webinars/introduction-elk-stack">ELK stack</a> for all our logging
+needs. <a href="https://www.elastic.co/products/logstash">Logstash</a> runs on every host and watches a set of files that eventually get indexed into our
+<a href="https://www.elastic.co/products/elasticsearch">Elasticsearch</a> cluster.</p>
+<p>We explored a few different options, one of which was putting Logstash inside the container. At the time, our container was constantly evolving and as a result,
+expanding. Installing Java and adding Logstash to our container was going to lengthen our build times and violate our separation of responsibilities. Additionally,
+we were still interested in some of the logs that existed on the host. This meant two instances of Logstash on those hosts. We decided that this was not an appropriate
+solution.</p>
+<p>In interest of simplicity and moving forward, we decided to mount <code>/var/log</code> from our host into our container. This allowed us to write to log files in
+our container and have them available on the host. From a Logstash point of view, we had to add configuration to monitor these new files and that was about it. Maybe
+this wasn't the most glorious solution, but we have our application in a container and we're running in production, two of our foremost goals.</p>
+
+<h1>Portability: Rethinking How We Log</h1>
+<p>Any team that runs containers long enough will really begin to question what they look for in a host. This is the question that many of the container orchestration
+tools are trying to answer. They tend to eliminate the need to think about hosts. They remove the need to think about the host so that your concerns boil down to
+which container is running and how many you need. While we're still only investigating container orchestration solutions, that host isolation is still desirable. So, if
+you're using the host machine, how can you lift yourself away from that dependency so that you can just have container(s) that run anywhere? <strong>Answer:</strong> moar
+containers! If you have responsibilities on the host that your container depends on and you want to maintain host isolation, you'll want to investigate how you can achieve
+those responsibilities inside additional containers.</p>
 <h2>Logspout</h2>
-<p>I would say in most use cases, <a href="https://github.com/gliderlabs/logspout">Logspout</a> will probably alleviate solve your logging problems. It is a small container
-that you run on your host that accepts logs from the <code>stdout</code> of the other containers running on the host and will route your logs. There are modules available
-to meet your needs and loggin environment. There is even a <a href="https://github.com/looplab/logspout-logstash">Logstash module</a>.</p>
+<p><a href="https://github.com/gliderlabs/logspout">Logspout</a> was our first attempt at solving our logging problem. It's a minimalist container that run on a host
+that takes logs from <code>stdout</code> of other running containers and allows you to route the logs somewhere. There are several modules available and even some third
+party modules, including one for <a href="https://github.com/looplab/logspout-logstash">Logstash</a>.</p>
 <p>Unfortunately, Logspout did not solve our problems. For one, <code>stdout</code> is the only stream for the logs to flow through. If you have more than one type
 of log coming from your container, which we did, you have to generate a Logstash configuration that handles this. One of Logstash's weaknesses is that it's conditional
 constructs are not extensive and often lead to multiple if-else statements with cryptic conditionals. Second, which is definitely preference based, is that you lose the
 phyiscal log file. In one regard, you don't have to worry about log rotation and retention, but you're really relying on your logging infrastructure to be highly
 available and reliable.</p>
 <h2>Data Container with Logstash</h2>
-<p>After doing some research, we found a way to use Logstash as we had traditionally used it, but inside a container.</p>
+<p>After doing some research, we found a way to use Logstash as we had traditionally used it, but inside a container. We ended up using what Docker as
+<a href="https://docs.docker.com/v1.10/engine/userguide/containers/dockervolumes/">data volume containers</a>. To do so, we'd create a container running Logstash
+with a volume at <code>/var/log</code>. When running our application container, we'd have it use the volume from our Logstash container, the log directory. Here is
+(generally) how this would work:</p>
+<pre style="display: inline-block;"><code class="custom-bash"># Window1
+# Start up our log container
+host ~ docker run --name logstash -v /var/log -it ubuntu /bin/bash
+
+
+
+
+# Check that the log shows up
+root@366320d88c4a:/# cat /var/log/test.txt
+Hey! A log
+</code></pre>
+<pre style="display: inline-block;"><code class="custom-bash"># Window2
+
+
+# Start up our application container and just dump a log
+host ~ docker run --name app --volumes-from logstash \
+    -it ubuntu /bin/bash -c "echo Hey! A log > /var/log/test.txt"
+
+
+
+
+</code></pre>
+<p>As you can see, this alleviates the need for a host volume and having Logstash run on the host. This gave us the power to generate Logstash configuration that handles
+individual files. This grants you convenience in terms of easily tagging your log files and being able to <code>grok</code> fields from them later. In my experience, you
+should try to distinguish the differences between your log files as easily and cheapily as possible.</p>
+<pre><code>input {
+  file {
+    path => "/var/log/app.log"
+    tags => ["app"]
+  }
+}
+
+input {
+  file {
+    path => "/var/log/server.log"
+    tags => ["server"]
+  }
+}
+
+filter {
+  if "app" in [tags] {
+    # special app log stuff here
+  }
+
+  if "server" in [tags] {
+    # special server log stuff here
+  }
+}
+</code></pre>
+<p>This pattern keeps your Logstash conditional structures to a minimum and very easy to understand. This is accomplished by tagging each stream of logs at the source.
+Without this, you normally have to detect patterns in logs in order to dictate what type of log you're looking at. This is especially true when you have a single stream
+of logs streaming from multiple sources.</p>
+<h1>Conclusion</h1>
+<p>Adjusting to the Docker has definitely had its ups and downs. Forcing yourself to separate your containers from the host directly cause you to really think
+about the services you're running and how they interact with each other. By addressing this as early as possible you prepare yourself for whatever container
+orchestration you might want down the road. As you build out more services and container-ize them, it's inevitable that you'll need a container orchestration
+solution. We ran into this problem relatively early and solved it by using a data volume container with Logstash alongside our application container. If you have
+any questions, feel free to reach me <a href="https://twitter.com/austburn">@austburn</a>.</p>
