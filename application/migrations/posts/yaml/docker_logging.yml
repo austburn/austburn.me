@@ -1,0 +1,7 @@
+title: "Portable Docker Logging"
+date:
+  year:   2016
+  month:  6
+  day:    30
+gist: "Docker is a useful tool, but getting your logs while maintaining the container-host separation can be difficult."
+post: docker_logging.html
