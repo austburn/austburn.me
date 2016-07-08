@@ -42,12 +42,37 @@ those responsibilities inside additional containers.</p>
 <h2>Logspout</h2>
 <p><a href="https://github.com/gliderlabs/logspout">Logspout</a> was our first attempt at solving our logging problem. It's a minimalist container that run on a host
 that takes logs from <code>stdout</code> of other running containers and allows you to route the logs somewhere. There are several modules available and even some third
-party modules, including one for <a href="https://github.com/looplab/logspout-logstash">Logstash</a>.</p>
+party modules, including one for <a href="https://github.com/looplab/logspout-logstash">Logstash</a>. Here's an example of how you might use Logspout:</p>
+<pre style="display: inline-block;"><code class="custom-bash"># Window1
+# Start up logspout
+host ~ docker run -d --name="logspout" \
+    --volume=/var/run/docker.sock:/var/run/docker.sock \
+    --publish=127.0.0.1:8000:80 \
+    gliderlabs/logspout
+
+# This is how you can tail the logs... via curl...
+host ~ curl http://127.0.0.1:8000/logs
+             app|Hey! A log
+</code></pre>
+<pre style="display: inline-block;"><code class="custom-bash"># Window2
+
+
+
+
+
+
+# Start up our application container and produce a line on stdout
+host ~ docker run --name app ubuntu /bin/bash -c "echo Hey! A log"
+
+</code></pre>
 <p>Unfortunately, Logspout did not solve our problems. For one, <code>stdout</code> is the only stream for the logs to flow through. If you have more than one type
 of log coming from your container, which we did, you have to generate a Logstash configuration that handles this. One of Logstash's weaknesses is that it's conditional
 constructs are not extensive and often lead to multiple if-else statements with cryptic conditionals. Second, which is definitely preference based, is that you lose the
 phyiscal log file. In one regard, you don't have to worry about log rotation and retention, but you're really relying on your logging infrastructure to be highly
 available and reliable.</p>
+<p>While Logspout didn't work for our particular use case, it works wonderfully if you have multiple instances of the same container running on the same host that
+you need to pull logs from. You have a consistent pattern and the logs are prepended by their container name. This makes you Logstash config simple and you'll be
+able to easily pull out the container name from the log letting you know from a monitoring perspective which container may be having a problem.</p>
 
 <h2>Data Container with Logstash</h2>
 <p>After doing some research, we found a way to use Logstash as we had traditionally used it, but inside a container. We ended up using what Docker as
@@ -106,10 +131,14 @@ filter {
 <p>This pattern keeps your Logstash conditional structures to a minimum and very easy to understand. This is accomplished by tagging each stream of logs at the source.
 Without this, you normally have to detect patterns in logs in order to dictate what type of log you're looking at. This is especially true when you have a single stream
 of logs streaming from multiple sources.</p>
+<p>It's important to note that multiple sources means multiples files on the "filesystem" (from the developer's point of view, these are in the container). This solution
+is not optimal if each host is to serve multiple instances of the same service and/or container. There is a 1:1 ratio of service to Logstash data container in this
+scenario. If each host is designated to running a set of services, as long as logs don't clash, this solution will work for you.</p>
 
 <h1>Conclusion</h1>
 <p>Adjusting to the Docker has definitely had its ups and downs. Forcing yourself to separate your containers from the host directly cause you to really think
 about the services you're running and how they interact with each other. By addressing this as early as possible you prepare yourself for whatever container
 orchestration you might want down the road. As you build out more services and container-ize them, it's inevitable that you'll need a container orchestration
-solution. We ran into this problem relatively early and solved it by using a data volume container with Logstash alongside our application container. If you have
-any questions, feel free to reach me <a href="https://twitter.com/austburn">@austburn</a>.</p>
+solution. We ran into this problem relatively early and solved it by using a data volume container with Logstash alongside our application container. As explained above,
+depending on what you're trying to achieve with your container orchestration tool, Logspout might be a better solution for you. If you have any questions, feel free
+to reach me <a href="https://twitter.com/austburn">@austburn</a>.</p>
