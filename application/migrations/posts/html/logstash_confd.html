@@ -109,7 +109,7 @@ host ~/logstash-confd/ docker run -it --name logstash-confd \
 
 
 # Exec into our container and just dump some logs
-host ~ docker exec -it logstash_confd /bin/bash -c \
+host ~ docker exec -it logstash-confd /bin/bash -c \
         "echo user did x > /var/log/web.log && echo accessed / > /var/log/access.log"
 
 
