@@ -61,15 +61,15 @@ run the application outside the container. Wait... my database is inside a conta
 My dev flow was flawed. As a result, I only ever had so much faith in the changes I made. To be confident in the changes you make, you need
 a proper development flow.</p>
 <p>That is why I headered this section `Simplify`. The first step to configuration management is actually management. Can your application itself be
-managed? Does this make sense? Can I explain how it all works to a <a href="http://www.rubberduckdebugging.com/">rubber duck</a>?</p>
+managed? Does this make sense? Can I explain how it all works to a <a class="content-link" href="http://www.rubberduckdebugging.com/">rubber duck</a>?</p>
 <p>In my eyes, the source of my problems were largely my Docker images/containers. Ultimately, I decided to yank Nginx out of the container. Can you have Nginx
 and your application running inside a container? Of course. I decided to adhere more closely to the
-<a href="http://www.catb.org/esr/writings/taoup/html/ch01s06.html">Unix philosophy</a> and have my container do one thing and do it well - my Python
+<a class="content-link" href="http://www.catb.org/esr/writings/taoup/html/ch01s06.html">Unix philosophy</a> and have my container do one thing and do it well - my Python
 application. This accomplished a few things:</p>
 <ul>
     <li>Faster container builds</li>
     <li>Less images!</li>
-    <li><code>pdb</code> - <a href="https://docs.python.org/2/library/pdb.html">The Python Debugger</a> which I adore/abuse</li>
+    <li><code>pdb</code> - <a class="content-link" href="https://docs.python.org/2/library/pdb.html">The Python Debugger</a> which I adore/abuse</li>
     <li>Reduced responsibilities for the container; reduced cognitive load</li>
     <li>More portable container - it's just my Python application and dependencies - it can be run the exact same way locally as on my server</li>
 </ul>
@@ -77,9 +77,9 @@ application. This accomplished a few things:</p>
 
 <h1>Ansible</h1>
 <p>As I began to weigh my options of which configuration management solution to choose, I picked Ansible mainly out of interest. At
-<a href="https://mycloud.rackspace.com">Rackspace</a> we use <a href="https://github.com/tobami/littlechef">LittleChef</a>. Like Ansible, LittleChef uses
+<a class="content-link" href="https://mycloud.rackspace.com">Rackspace</a> we use <a class="content-link" href="https://github.com/tobami/littlechef">LittleChef</a>. Like Ansible, LittleChef uses
 a push model ("Hey, I have some changes for you, here they are.") for infrastructure changes. While using something like
-<a href="https://downloads.chef.io/chef-server/">Chef Server</a> would expose me to a pull model ("Hey boss, any changes you need me to make?"), I
+<a class="content-link" href="https://downloads.chef.io/chef-server/">Chef Server</a> would expose me to a pull model ("Hey boss, any changes you need me to make?"), I
 figured it might be a little overkill and LittleChef has already introduced me to some of the Chef philosophies. I had also just taken a class
 at Rackspace on Ansible and felt ready to try to apply the skills I had learned.</p>
 <h2>First Impressions</h2>
@@ -96,9 +96,9 @@ track of all your resources manageable. Additionally, I found the <code>ansible-
 <h2>Vault</h2>
 <p>Pretty much exactly like encrypted data bags in Chef, Vault is Ansible's offering to encrypt your sensitive data. It requires a password or
 secret file and a target file to encrypt.
-I followed the <a href="http://docs.ansible.com/ansible/playbooks_vault.html#running-a-playbook-with-vault">documentation</a> on
+I followed the <a class="content-link" href="http://docs.ansible.com/ansible/playbooks_vault.html#running-a-playbook-with-vault">documentation</a> on
 how to get started with Vault and
-used <a href="http://docs.ansible.com/ansible/playbooks_best_practices.html#best-practices-for-variables-and-vaults">this</a> guide on best practices
+used <a class="content-link" href="http://docs.ansible.com/ansible/playbooks_best_practices.html#best-practices-for-variables-and-vaults">this</a> guide on best practices
 to setup my variables correctly in conjunction with Vault. I used Vault to encrypt my SSL cert/key and my Postgres credentials.</p>
 <p>Once I had cleaned up my application, the next step was to get everything into version control. By encrypting the sensitive bits, I can
 confidently store everything in version control aside from my secret file containing my Vault password. This makes development possible from
