@@ -77,6 +77,11 @@ host ~/logstash-confd/ docker run -it --name logstash-confd \
                         -e ENVIRONMENT=test \
                         -e REGION=local \
                         logstash-confd
+
+
+
+
+
 {
         "message" => "user did x",
        "@version" => "1",
@@ -90,7 +95,7 @@ host ~/logstash-confd/ docker run -it --name logstash-confd \
          "region" => "local"
 }
 {
-        "message" => "accessed home",
+        "message" => "/ 200 OK",
        "@version" => "1",
      "@timestamp" => "2016-08-12T16:17:51.842Z",
            "path" => "/var/log/access.log",
@@ -100,18 +105,20 @@ host ~/logstash-confd/ docker run -it --name logstash-confd \
     ],
     "environment" => "test",
          "region" => "local"
-}
-
-</code></pre>
+}</code></pre>
 <pre style="display: inline-block;"><code class="custom-bash"># Window2
+
+
+
+
 
 
 
 
 # Exec into our container and just dump some logs
 host ~ docker exec -it logstash-confd /bin/bash -c \
-        "echo user did x > /var/log/web.log && echo accessed / > /var/log/access.log"
-
+        "echo user did x > /var/log/web.log && \
+        echo / 200 OK > /var/log/access.log"
 
 
 
