@@ -12,5 +12,12 @@ austburn.1.me
 austburn.2.me
 austburn.test.me
 
+[production]
+austburn.1.me
+austburn.2.me
+
+[test]
+austburn.test.me
+
 [registry]
 austburn.registry

@@ -1,4 +1,13 @@
 ---
+- name: create cert directory
+  file: path=/home/austin/certs state=directory
+
+- name: copy certs
+  command: cp /etc/letsencrypt/live/{{ domain }}/{{ item }} /home/austin/certs
+  with_items:
+    - fullchain.pem
+    - privkey.pem
+
 - name: install htpasswd
   apt: name=apache2-utils state=present
 
