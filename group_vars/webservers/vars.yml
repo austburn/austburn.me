@@ -1,5 +1,3 @@
 ---
 pg_user: "{{ vault_pg_user }}"
 pg_password: "{{ vault_pg_password }}"
-domain: austburn.me
-letsencrypt_hooks: '--pre-hook "service nginx stop" --post-hook "service nginx start"'

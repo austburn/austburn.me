@@ -1,3 +1,14 @@
 ---
-- include: docker.yml
-- include: letsencrypt.yml
+# Install docker
+
+- name: apt-get update
+  apt: update_cache=yes
+
+- name: install packages
+  apt: name={{ item }} state=present
+  with_items:
+    - apt-transport-https
+    - ca-certificates
+    - make
+    - linux-image-generic-lts-{{ ansible_distribution_release }}
+    - linux-image-extra-{{ ansible_kernel }}
