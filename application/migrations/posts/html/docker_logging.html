@@ -14,8 +14,8 @@ a pipeline set up to build our container, ship it to <a class="content-link" hre
 about the logs?</em>.</p>
 
 <div style="text-align:center;">
-    <img src="https://i.makeagif.com/media/5-05-2014/zAfH3e.gif" style="width:30%;">
-    <div class="caption">Me thinking about our logs.</div>
+  <img src="https://i.makeagif.com/media/5-05-2014/zAfH3e.gif" style="width:30%;">
+  <div class="caption">Me thinking about our logs.</div>
 </div>
 
 <h1>Making It Work</h1>
@@ -43,7 +43,7 @@ those responsibilities inside additional containers.</p>
 <p><a class="content-link" href="https://github.com/gliderlabs/logspout">Logspout</a> was our first attempt at solving our logging problem. It's a minimalist container that run on a host
 that takes logs from <code>stdout</code> of other running containers and allows you to route the logs somewhere. There are several modules available and even some third
 party modules, including one for <a class="content-link" href="https://github.com/looplab/logspout-logstash">Logstash</a>. Here's an example of how you might use Logspout:</p>
-<pre style="display: inline-block;"><code class="custom-bash"># Window1
+<pre class="split-pane"><code class="custom-bash"># Window1
 # Start up logspout
 host ~ docker run -d --name="logspout" \
     --volume=/var/run/docker.sock:/var/run/docker.sock \
@@ -52,9 +52,8 @@ host ~ docker run -d --name="logspout" \
 
 # This is how you can tail the logs... via curl...
 host ~ curl http://127.0.0.1:8000/logs
-             app|Hey! A log
-</code></pre>
-<pre style="display: inline-block;"><code class="custom-bash"># Window2
+             app|Hey! A log</code></pre>
+<pre class="split-pane"><code class="custom-bash"># Window2
 
 
 
@@ -79,7 +78,7 @@ able to easily pull out the container name from the log letting you know from a 
 <a class="content-link" href="https://docs.docker.com/v1.10/engine/userguide/containers/dockervolumes/">data volume containers</a>. To do so, we'd create a container running Logstash
 with a volume at <code>/var/log</code>. When running our application container, we'd have it use the volume from our Logstash container, the log directory. Here is
 (generally) how this would work:</p>
-<pre style="display: inline-block;"><code class="custom-bash"># Window1
+<pre class="split-pane"><code class="custom-bash"># Window1
 # Start up our log container
 host ~ docker run --name logstash -v /var/log -it ubuntu /bin/bash
 
@@ -90,7 +89,7 @@ host ~ docker run --name logstash -v /var/log -it ubuntu /bin/bash
 root@366320d88c4a:/# cat /var/log/test.txt
 Hey! A log
 </code></pre>
-<pre style="display: inline-block;"><code class="custom-bash"># Window2
+<pre class="split-pane"><code class="custom-bash"># Window2
 
 
 # Start up our application container and just dump a log
@@ -126,8 +125,7 @@ filter {
   if "server" in [tags] {
     # special server log stuff here
   }
-}
-</code></pre>
+}</code></pre>
 <p>This pattern keeps your Logstash conditional structures to a minimum and very easy to understand. This is accomplished by tagging each stream of logs at the source.
 Without this, you normally have to detect patterns in logs in order to dictate what type of log you're looking at. This is especially true when you have a single stream
 of logs streaming from multiple sources.</p>
