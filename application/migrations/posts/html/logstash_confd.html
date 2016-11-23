@@ -69,7 +69,7 @@ Looking at <code>filter.tmpl</code>, you can see we access our <code>keys</code>
     <li><a class="content-link" href="https://github.com/austburn/logstash-confd/blob/not-crazy/Dockerfile#L11">Start Logstash</a></li>
 </ol>
 <h2>Demo</h2>
-<pre style="display: inline-block;"><code class="custom-bash"># Window1
+<pre class="split-pane"><code class="custom-bash"># Window1
 # Build and tag
 host ~/logstash-confd/ docker build --tag logstash-confd .
 # Run it
@@ -106,7 +106,7 @@ host ~/logstash-confd/ docker run -it --name logstash-confd \
     "environment" => "test",
          "region" => "local"
 }</code></pre>
-<pre style="display: inline-block;"><code class="custom-bash"># Window2
+<pre class="split-pane"><code class="custom-bash"># Window2
 
 
 

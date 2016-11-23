@@ -24,8 +24,7 @@ messages that I have encrypted is dangerous.</li>
 </ul>
 <p>To demonstrate public key cryptograpy, let's look at some code that utilitzes
 <a class="content-link" href="https://godoc.org/golang.org/x/crypto/nacl/box"><code>NaCl</code></a>, a popular cryptography toolset ported to Go:</p>
-<pre><code class="go">
-package main
+<pre><code class="go">package main
 
 import(
     "fmt"
@@ -64,7 +63,7 @@ func main() {
 }
 </code></pre>
 <p>The only thing in the code example that we haven't really discussed is the idea of a nonce. A <strong>nonce</strong> is a
-  <strong>n</strong>umber that is used <strong>o</strong>nce. Get it? Basically, the nonce is a mechanism used to further ensure
+  <strong>n</strong>umber that is used <strong>once</strong>. Get it? Basically, the nonce is a mechanism used to further ensure
   the security of a message. By using a different nonce for each sent message, you further reduce the ability of an attacker
 being able to decrypt your communications.</p>
 <p>Aside from the nonce, you can see that the core concept shown above is public key cryptography. We each have a public/private keypair.
@@ -73,8 +72,7 @@ being able to decrypt your communications.</p>
   are performing the same operation twice, but I wanted to demonstrate public key cryptography and the sharing of public keys. This demonstration
 will transcend to our final server implementation - think of 'me' and 'you' as the client and the server.</p>
 <p>Now we have the basics of public key cryptography hammered out, let's take a look at our server/client:</p>
-<pre style="display:inline-block;"><code class="go">
-// server.go
+<pre class="split-pane"><code class="go">// server.go
 package main
 
 import(
@@ -117,8 +115,7 @@ func handleConnection(c *net.TCPConn) {
     }
 }
 </code></pre>
-<pre style="display:inline-block;"><code class="go">
-// client.go
+<pre class="split-pane"><code class="go">// client.go
 package main
 
 import(
@@ -155,6 +152,11 @@ func main() {
         fmt.Printf("%s\n", response)
     }
 }
+
+
+
+
+
 </code></pre>
 <p>This is a very simple server and client. The server listens for connections and echos your response back with a timestamp.
   The client starts a connection to the server and displays a prompt to the user. Entering messages sends them to the server
@@ -213,8 +215,7 @@ method <code>Precompute</code> which provides a speed optimization for when you 
   leverage the power of Go, I implemented a <code>SecureConnection</code>. From a high level observation, this <code>SecureConnection</code>
   works like the standard <code>net.Conn</code> interface. Upon closer inspection, the <code>Read</code> and <code>Write</code> methods are using
 the <code>NaCl</code> package to encrypt on writes and decrypt on reads:</p>
-<pre><code class="go">
-// secure.go
+<pre><code class="go">// secure.go
 func (s *SecureConnection) Write(p []byte) (int, error) {
     var nonce [24]byte
 

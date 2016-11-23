@@ -25,8 +25,7 @@ it presents itself as a useful exercise that others might be able to relate to.<
 through the basics of Logstash, getting it set up, and how to write Logstash configurations.</p>
 <p>With that, let's get started. When writing a new filter, I usually just set up a basic config that utilizes <code>stdin</code>/<code>stdout</code> and
 as per Matt's suggestion, use <a class="content-link" href="https://grokdebug.herokuapp.com/">Grok Debugger</a> to create a basic filter:</p>
-  <pre><code>
-input {
+  <pre><code>input {
   stdin { }
 }
 
@@ -40,15 +39,14 @@ filter {
 
 output {
   stdout { codec => rubydebug }
-}
-</code></pre>
+}</code></pre>
 <p>This Logstash configuration enables us to filter our first type of log, a basic log with a timestamp, username, and a message. We'll use the <code>GREEDYDATA</code>
 pattern because both usernames and messages can contain symbols that the <code>WORD</code> pattern does not include.</p>
 <p class="tip"><strong>TIP:</strong> You can find a list of Logstash grok patterns
-  <a class="content-link" href="https://github.com/elastic/logstash/blob/v1.4.2/patterns/grok-patterns">here</a>.</p>
-  <p>Let's take a look at what our config will do:</p>
-    <pre><code class="custom-bash">
-$ bin/logstash  -f grok_config
+  <a class="content-link" href="https://github.com/elastic/logstash/blob/v1.4.2/patterns/grok-patterns">here</a>.
+</p>
+<p>Let's take a look at what our config will do:</p>
+  <pre><code class="custom-bash">$ bin/logstash  -f grok_config
 Logstash startup completed
 [07:25:53] &lt;austburn&gt; ping
 {
@@ -58,12 +56,10 @@ Logstash startup completed
         "time" => "07:25:53",
     "username" => "austburn",
          "msg" => "ping"
-}
-  </code></pre>
-  <p>Awesome, our config worked as expected.</p>
-  <p>What if we feed it a system log?</p>
-    <pre><code class="custom-bash">
-$ bin/logstash  -f grok_config
+}</code></pre>
+<p>Awesome, our config worked as expected.</p>
+<p>What if we feed it a system log?</p>
+  <pre><code class="custom-bash">$ bin/logstash  -f grok_config
 Logstash startup completed
 [07:25:53] austin is now known as austburn
 {
@@ -73,14 +69,12 @@ Logstash startup completed
         "tags" => [
       [0] "_grokparsefailure"
   ]
-}
-  </code></pre>
-  <p><code>_grokparsefailure</code> is not what we wanted. Since we were looking for a username enclosed in angle brackets, grok didn't appreciate our log
-  not adhering to that style.</p>
-  <p>Logstash supports multiple grok patterns. Be careful as Logstash attempts to parse logs in the order of the patterns. I made this mistake by putting a more
-  lenient pattern first and it absorbed all my logs. As a rule of thumb, you'd want to have your least generic filter take precedence.</p>
-    <pre><code>
-input {
+}</code></pre>
+<p><code>_grokparsefailure</code> is not what we wanted. Since we were looking for a username enclosed in angle brackets, grok didn't appreciate our log
+not adhering to that style.</p>
+<p>Logstash supports multiple grok patterns. Be careful as Logstash attempts to parse logs in the order of the patterns. I made this mistake by putting a more
+lenient pattern first and it absorbed all my logs. As a rule of thumb, you'd want to have your least generic filter take precedence.</p>
+  <pre><code>input {
   stdin { }
 }
 
@@ -94,10 +88,8 @@ filter {
 
 output {
   stdout { codec => rubydebug }
-}
-  </code></pre>
-    <pre><code class="custom-bash">
-$ bin/logstash  -f grok_config
+}</code></pre>
+  <pre><code class="custom-bash">$ bin/logstash  -f grok_config
 Logstash startup completed
 [07:25:53] austin is now known as austburn
 {
@@ -115,14 +107,12 @@ Logstash startup completed
         "time" => "07:25:57",
     "username" => "austburn",
          "msg" => "ping"
-}
-  </code></pre>
-  <p>Now our filter accepts and parses both types of logs. In reality, I don't really care if austin changed his IRC nickname at all. I don't need to index these
-  logs or look at them ever again, so we're actually going to ignore them.</p>
-  <p>Normally, you probably would not want to drop all logs that produce <code>_grokparsefailure</code>'s, but being that IRC logs are pretty straightforward, this
-  is OK.</p>
-    <pre><code>
-input {
+}</code></pre>
+<p>Now our filter accepts and parses both types of logs. In reality, I don't really care if austin changed his IRC nickname at all. I don't need to index these
+logs or look at them ever again, so we're actually going to ignore them.</p>
+<p>Normally, you probably would not want to drop all logs that produce <code>_grokparsefailure</code>'s, but being that IRC logs are pretty straightforward, this
+is OK.</p>
+  <pre><code>input {
   stdin { }
 }
 
@@ -139,12 +129,10 @@ filter {
 
 output {
   stdout { codec => rubydebug }
-}
-  </code></pre>
-  <p>While using <code>stdin</code> is great for debugging and general testing, it's not how we'll ultimately consume the logs. For right now, I plan to read
-  logs from disk. There is a <code>file</code> plugin for the input that we will use.</p>
-    <pre><code>
-input {
+}</code></pre>
+<p>While using <code>stdin</code> is great for debugging and general testing, it's not how we'll ultimately consume the logs. For right now, I plan to read
+logs from disk. There is a <code>file</code> plugin for the input that we will use.</p>
+  <pre><code>input {
   file {
     path => ["/data/log/*"]
     start_position => "beginning"
@@ -165,23 +153,21 @@ filter {
 
 output {
   stdout { codec => rubydebug }
-}
-  </code></pre>
-  <p>Let's talk through this config:</p>
-  <ul>
-    <li><strong>path</strong>: Where the logs we want are located on disk</li>
-    <li><strong>start_position</strong>: Tell where Logstash to begin parsing files. By default, this is set to <code>"end"</code> because Logstash expects traditional
-    log behavior where new logs are appended to the file.</li>
-    <li><strong>sincedb_path</strong>: Really only necessary for the ability to reprocess logs. Logstash keeps track of how much of a file it has parsed so
-      that it does not reprocess logs. By setting this to <code>/dev/null</code>, Logstash effectively has no memory and will reprocess logs each run. We will
-    want to remove this when we begin to actually consume logs.</li>
-  </ul>
-  <p>As I mentioned before, ZNC stores some valuable data in the name of the log file including the user, network, channel, and date. If you've noticed, our
-  timestamps are not linked to the time the log was written. This information will be important for indexing logs and searching for logs base on time.</p>
-  <p>Because we're now consuming logs from file, we have access to the filename via the path attribute. We can add a second grok pattern and add this information
-  to the log.</p>
-    <pre><code>
-input {
+}</code></pre>
+<p>Let's talk through this config:</p>
+<ul>
+  <li><strong>path</strong>: Where the logs we want are located on disk</li>
+  <li><strong>start_position</strong>: Tell where Logstash to begin parsing files. By default, this is set to <code>"end"</code> because Logstash expects traditional
+  log behavior where new logs are appended to the file.</li>
+  <li><strong>sincedb_path</strong>: Really only necessary for the ability to reprocess logs. Logstash keeps track of how much of a file it has parsed so
+    that it does not reprocess logs. By setting this to <code>/dev/null</code>, Logstash effectively has no memory and will reprocess logs each run. We will
+  want to remove this when we begin to actually consume logs.</li>
+</ul>
+<p>As I mentioned before, ZNC stores some valuable data in the name of the log file including the user, network, channel, and date. If you've noticed, our
+timestamps are not linked to the time the log was written. This information will be important for indexing logs and searching for logs base on time.</p>
+<p>Because we're now consuming logs from file, we have access to the filename via the path attribute. We can add a second grok pattern and add this information
+to the log.</p>
+  <pre><code>input {
   file {
     path => ["/data/log/*"]
     start_position => "beginning"
@@ -206,11 +192,9 @@ filter {
 
 output {
   stdout { codec => rubydebug }
-}
-  </code></pre>
-  <p>Let's see what this looks like:</p>
-    <pre><code class="custom-bash">
-$ bin/logstash  -f grok_config
+}</code></pre>
+<p>Let's see what this looks like:</p>
+  <pre><code class="custom-bash">$ bin/logstash  -f grok_config
 Logstash startup completed
 {
      "message" => "[19:43:13] &lt;austburn&gt; hey",
@@ -227,13 +211,11 @@ Logstash startup completed
         "year" => "2015",
        "month" => "06",
          "day" => "15"
-}
-  </code></pre>
-  <p>We now have all the information to craft the timestamp based on the filename and time in the log message itself.</p>
-  <p>To achieve this, we are going to have to construct a timestamp from the information we have and apply the <code>date</code> filter in
-  order to manipulate the <code>@timestamp</code> field.</p>
-    <pre><code>
-input {
+}</code></pre>
+<p>We now have all the information to craft the timestamp based on the filename and time in the log message itself.</p>
+<p>To achieve this, we are going to have to construct a timestamp from the information we have and apply the <code>date</code> filter in
+order to manipulate the <code>@timestamp</code> field.</p>
+  <pre><code>input {
   file {
     path => ["/data/log/*"]
     start_position => "beginning"
@@ -268,18 +250,16 @@ filter {
 
 output {
   stdout { codec => rubydebug }
-}
-  </code></pre>
-  <p>This config will:</p>
-  <ol>
-    <li>Grab the time information from the IRC log as well as the filename.</li>
-    <li>Create a <code>message_timestamp</code> field based on the information we collected.</li>
-    <li>Use the date filter to parse the <code>message_timestamp</code> field and assign the value to the <code>@timestamp</code> field.</li>
-    <li>Remove all the time related fields that we no longer need.</li>
-  </ol>
-  <p>Let's see what the final log looks like:</p>
-    <pre><code class="custom-bash">
-$ bin/logstash  -f grok_config
+}</code></pre>
+<p>This config will:</p>
+<ol>
+  <li>Grab the time information from the IRC log as well as the filename.</li>
+  <li>Create a <code>message_timestamp</code> field based on the information we collected.</li>
+  <li>Use the date filter to parse the <code>message_timestamp</code> field and assign the value to the <code>@timestamp</code> field.</li>
+  <li>Remove all the time related fields that we no longer need.</li>
+</ol>
+<p>Let's see what the final log looks like:</p>
+  <pre><code class="custom-bash">$ bin/logstash  -f grok_config
 Logstash startup completed
 {
      "message" => "[19:43:13] &lt;austburn&gt; hey",
@@ -292,16 +272,15 @@ Logstash startup completed
     "znc_user" => "austburn",
      "network" => "freenode",
      "channel" => "austin_channel"
-}
-  </code></pre>
-  <p>Great, now our logs parsed and include all the information we need (or have access to for that matter) to start indexing.</p>
-  <p>That will conclude this part of the series. In conclusion we:</p>
-  <ul>
-    <li>Set up Logstash.</li>
-    <li>Built a basic Logstash config utilizing <code>stdin</code>.</li>
-    <li>Filtered out IRC system logs.</li>
-    <li>Created a Logstash filter for reading from disk.</li>
-    <li>Gathered interesting information from the filename.</li>
-    <li>Used the information we had to give the log an accurate timestamp.</li>
-  </ul>
-  <p>If you have any questions, feel free to ping me on <a class="content-link" href="https://twitter.com/austburn">Twitter</a>!</p>
+}</code></pre>
+<p>Great, now our logs parsed and include all the information we need (or have access to for that matter) to start indexing.</p>
+<p>That will conclude this part of the series. In conclusion we:</p>
+<ul>
+  <li>Set up Logstash.</li>
+  <li>Built a basic Logstash config utilizing <code>stdin</code>.</li>
+  <li>Filtered out IRC system logs.</li>
+  <li>Created a Logstash filter for reading from disk.</li>
+  <li>Gathered interesting information from the filename.</li>
+  <li>Used the information we had to give the log an accurate timestamp.</li>
+</ul>
+<p>If you have any questions, feel free to ping me on <a class="content-link" href="https://twitter.com/austburn">Twitter</a>!</p>

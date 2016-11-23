@@ -104,6 +104,10 @@ td:first-of-type {
   font-family: 'Oswald', sans-serif;
 }
 
+strong {
+  font-weight: bold;
+}
+
 a.post-link {
   font-size: 2.8em;
 }
@@ -157,9 +161,25 @@ i {
   box-sizing: border-box;
 }
 
-.custom-bash, .custom-bash .hljs-keyword {
-  background-color: #2c3e50 !important;
+.split-pane {
+  display: inline-block;
+  min-width: 49%;
+}
+
+.custom-bash {
   color: #ecf0f1 !important;
+  background-color: #2c3e50 !important;
+}
+
+.custom-bash .hljs-keyword, .custom-bash .hljs-attribute,
+.custom-bash .hljs-symbol, .custom-bash .hljs-literal,
+.custom-bash .hljs-regexp, .custom-bash .hljs-selector-tag,
+.custom-bash .hljs-built_in, .custom-bash .hljs-params {
+  color: #ecf0f1 !important;
+}
+
+.custom-bash .hljs-emphasis {
+  font-style: normal;
 }
 
 .custom-bash .hljs-number {

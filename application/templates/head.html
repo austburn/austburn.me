@@ -1,12 +1,13 @@
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/main.css') }}">
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/vendor/css/font-awesome.min.css') }}">
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles/googlecode.css') }}">
+<script src="https://use.fontawesome.com/34a41d50fc.js"></script>
 <link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
-<script src="{{ url_for('static', filename='js/highlight.pack.js') }}"></script>
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/styles/googlecode.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/languages/yaml.min.js"></script>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/main.css') }}">
 <script type="text/javascript">
   hljs.initHighlightingOnLoad();
 </script>
-<title>Austin Burnett</title>
+<title>{{ title }}</title>
 <meta name="author" content="Austin Burnett">
 <meta name="description" content="The software development blog of Austin Burnett.">
 <meta name="keywords" content="software, engineering, development, golang, networking, computer, science">

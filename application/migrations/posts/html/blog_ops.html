@@ -20,40 +20,40 @@ useful. (It wasn't.)</p>
 <p>As a first step, I took a look at what I had and where I wanted to be.</p>
 <p>Where I was:</p>
 <ul>
-    <li>My Docker container was bloated.</li>
-    <li>My dev flow was not extremely useful.</li>
-    <li>Had my server died, I'd be at square one.</li>
+  <li>My Docker container was bloated.</li>
+  <li>My dev flow was not extremely useful.</li>
+  <li>Had my server died, I'd be at square one.</li>
 </ul>
 <p>Where I wanted to be:</p>
 <ul>
-    <li>Simple Docker workflow.</li>
-    <li>Debugging capabilities.</li>
-    <li>Clear division of responbility.</li>
+  <li>Simple Docker workflow.</li>
+  <li>Debugging capabilities.</li>
+  <li>Clear division of responbility.</li>
 </ul>
 <p>Here is my Docker experience summed up into two memes (I have interchanged which one comes first multiple times):</p>
 <div style="text-align:center;">
-    <img src="https://bookloversunite.files.wordpress.com/2014/10/do-all-the-things.jpeg" style="width:30%;">
-    <img src="https://i.imgur.com/V8KfCpj.jpg" style="width:30%;">
+  <img src="https://bookloversunite.files.wordpress.com/2014/10/do-all-the-things.jpeg" style="width:30%;">
+  <img src="https://i.imgur.com/V8KfCpj.jpg" style="width:30%;">
 </div>
 <p>What I mean is that my experience with Docker was initially immature. I wasn't really sure what it was best used for, so I used it for just about
 everything. As I continually made changes to my blog, it seemed as though I was also adding more complexity to my container. As a result, I had 6
 Docker images - 5 of which were application based while the latter was my database. The 5 application images consisted of:</p>
 <ul>
-    <li><strong>base</strong>: install common dependencies (Python, pip, etc.)</li>
-    <li>
-        <strong>Nginx</strong>
-        <ul>
-            <li><strong>dev</strong>: Run on port 80, don't worry about certs, redirects, etc.</li>
-            <li><strong>prod</strong>: Run on port 80/443, worry about certs, redirects, etc.</li>
-        </ul>
-    </li>
-    <li>
-        <strong>Application</strong>
-        <ul>
-            <li><strong>dev</strong>: Build from dev Nginx image</li>
-            <li><strong>prod</strong>: Build from prod Nginx image</li>
-        </ul>
-    </li>
+  <li><strong>base</strong>: install common dependencies (Python, pip, etc.)</li>
+  <li>
+    <strong>Nginx</strong>
+    <ul>
+      <li><strong>dev</strong>: Run on port 80, don't worry about certs, redirects, etc.</li>
+      <li><strong>prod</strong>: Run on port 80/443, worry about certs, redirects, etc.</li>
+    </ul>
+  </li>
+  <li>
+    <strong>Application</strong>
+    <ul>
+      <li><strong>dev</strong>: Build from dev Nginx image</li>
+      <li><strong>prod</strong>: Build from prod Nginx image</li>
+    </ul>
+  </li>
 </ul>
 <p>The problem I had here was: development was slow and not very helpful. I was always indirectly running my Python application via Nginx/uWSGI -
 both server processes that close <code>stdin</code> and make debugging impossible. If there was a problem with the application itself, I had to
@@ -67,11 +67,11 @@ and your application running inside a container? Of course. I decided to adhere 
 <a class="content-link" href="http://www.catb.org/esr/writings/taoup/html/ch01s06.html">Unix philosophy</a> and have my container do one thing and do it well - my Python
 application. This accomplished a few things:</p>
 <ul>
-    <li>Faster container builds</li>
-    <li>Less images!</li>
-    <li><code>pdb</code> - <a class="content-link" href="https://docs.python.org/2/library/pdb.html">The Python Debugger</a> which I adore/abuse</li>
-    <li>Reduced responsibilities for the container; reduced cognitive load</li>
-    <li>More portable container - it's just my Python application and dependencies - it can be run the exact same way locally as on my server</li>
+  <li>Faster container builds</li>
+  <li>Less images!</li>
+  <li><code>pdb</code> - <a class="content-link" href="https://docs.python.org/2/library/pdb.html">The Python Debugger</a> which I adore/abuse</li>
+  <li>Reduced responsibilities for the container; reduced cognitive load</li>
+  <li>More portable container - it's just my Python application and dependencies - it can be run the exact same way locally as on my server</li>
 </ul>
 <p>At this point, I felt comfortable moving forward. Now, I just need to get Docker, Nginx, and my image to a server.</p>
 
