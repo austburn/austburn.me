@@ -12,28 +12,35 @@ app.logger.addHandler(handler)
 def index():
     return render_template(
         'base.html',
-        post=session.query(Post).order_by(Post.date.desc()).first()
+        post=session.query(Post).order_by(Post.date.desc()).first(),
+        title='@austburn'
     )
 
 
 @app.route('/about')
 def about():
-    return render_template('about.html')
+    return render_template(
+        'about.html',
+        title='@austburn - About Me'
+    )
 
 
 @app.route('/posts')
 def posts():
     return render_template(
         'posts.html',
-        posts=session.query(Post).order_by(Post.date.desc())
+        posts=session.query(Post).order_by(Post.date.desc()),
+        title='Posts'
     )
 
 
 @app.route('/posts/<post_id>')
 def post(post_id):
+    post = session.query(Post).filter(Post.tag == post_id).one()
     return render_template(
         'base.html',
-        post=session.query(Post).filter(Post.tag == post_id).one()
+        post=post,
+        title=post.title
     )
 
 
