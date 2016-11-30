@@ -5,12 +5,10 @@ machine:
 dependencies:
   override:
     - make img
-    - npm install
 
 test:
   override:
     - make test
-    - npm run lint
 
 deployment:
   master:

@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "austburn.me",
   "scripts": {
-    "build": "babel src -d application/static/js",
+    "build": "babel src -d static/js",
     "lint": "eslint src"
   },
   "author": "Austin Burnett",
