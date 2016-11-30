@@ -20,4 +20,4 @@ RUN mv /tmp/node_modules /application && npm run build
 ENV PYTHONPATH /application
 
 CMD . /env/bin/activate && python migrations/posts.py && \
-    uwsgi --json uwsgi.json
+    uwsgi app.ini
