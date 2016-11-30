@@ -33,3 +33,9 @@ js_lint:
 
 db:
 	docker run --detach --env POSTGRES_USER=local --env POSTGRES_PASSWORD=local --name postgres postgres
+
+deploy_test:
+	ansible-playbook webservers.yml --limit test -e "git_revision=$(gr)"
+
+deploy_production:
+	ansible-playbook webservers.yml --limit production -e "git_revision=$(gr)"
