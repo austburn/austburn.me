@@ -13,7 +13,7 @@ def index():
     return render_template(
         'base.html',
         post=session.query(Post).order_by(Post.date.desc()).first(),
-        title='@austburn'
+        title='@austburn - The Software Engineering Blog of Austin Burnett'
     )
 
 
@@ -40,7 +40,8 @@ def post(post_id):
     return render_template(
         'base.html',
         post=post,
-        title=post.title
+        title=post.title,
+        post_id=post_id
     )
 
 
