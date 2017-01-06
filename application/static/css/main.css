@@ -151,8 +151,14 @@ a.post-link:active, a.post-link:hover {
   margin-left: 50px;
 }
 
-i {
+.icon {
   color: #fff;
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  stroke-width: 0;
+  stroke: currentColor;
+  fill: currentColor;
 }
 
 * {

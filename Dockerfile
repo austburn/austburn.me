@@ -16,7 +16,7 @@ RUN . /env/bin/activate; pip install -r /requirements
 RUN cd /tmp && npm install
 
 COPY application /application
-RUN mv /tmp/node_modules /application && npm run build
+RUN mv /tmp/node_modules /application && npm run build && npm run minify_css
 ENV PYTHONPATH /application
 
 CMD . /env/bin/activate && python migrations/posts.py && \
