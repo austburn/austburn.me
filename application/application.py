@@ -12,17 +12,26 @@ app.logger.addHandler(handler)
 
 @app.after_request
 def after_request(response):
-    accepted_encodings = request.headers.get('Accept-Encoding', '')
-    if 'gzip' in accepted_encodings.lower():
-        response.direct_passthrough = False
-        gzip_buffer = StringIO()
-        gzip_file = gzip.GzipFile(mode='wb', fileobj=gzip_buffer)
-        gzip_file.write(response.data)
-        gzip_file.close()
+    # http://flask.pocoo.org/snippets/122/
+    accept_encoding = request.headers.get('Accept-Encoding', '')
+    if 'gzip' not in accept_encoding.lower():
+        return response
 
-        compressed_response = make_response(gzip_buffer.getvalue())
-        compressed_response.headers['Content-Encoding'] = 'gzip'
-        return compressed_response
+    response.direct_passthrough = False
+
+    if (response.status_code < 200 or response.status_code >= 300 or 'Content-Encoding' in response.headers):
+        return response
+
+    gzip_buffer = StringIO()
+    gzip_file = gzip.GzipFile(mode='wb',
+                              fileobj=gzip_buffer)
+    gzip_file.write(response.data)
+    gzip_file.close()
+
+    response.data = gzip_buffer.getvalue()
+    response.headers['Content-Encoding'] = 'gzip'
+    response.headers['Vary'] = 'Accept-Encoding'
+    response.headers['Content-Length'] = len(response.data)
 
     return response
 
