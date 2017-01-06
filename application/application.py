@@ -1,5 +1,5 @@
 from logging import FileHandler
-from flask import Flask, render_template, send_file, request, make_response
+from flask import Flask, render_template, send_file, request
 from cStringIO import StringIO
 import gzip
 

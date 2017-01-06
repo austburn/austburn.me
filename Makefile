@@ -24,11 +24,11 @@ update:
 
 test: py_lint js_lint
 
-py_lint:
+py_lint: img
 	docker run --rm --interactive --tty \
 				austburn.app sh -c "source /env/bin/activate && pep8 /application && pyflakes /application"
 
-js_lint:
+js_lint: img
 	docker run --rm --interactive --tty austburn.app sh -c "npm run lint"
 
 db:
