@@ -1,11 +1,30 @@
 from logging import FileHandler
-from flask import Flask, render_template, send_file
+from flask import Flask, render_template, send_file, request, make_response
+from cStringIO import StringIO
+import gzip
 
 from migrations.db import Post, session
 
 app = Flask(__name__, static_folder='static')
 handler = FileHandler('/var/log/flask.log')
 app.logger.addHandler(handler)
+
+
+@app.after_request
+def after_request(response):
+    accepted_encodings = request.headers.get('Accept-Encoding', '')
+    if 'gzip' in accepted_encodings.lower():
+        response.direct_passthrough = False
+        gzip_buffer = StringIO()
+        gzip_file = gzip.GzipFile(mode='wb', fileobj=gzip_buffer)
+        gzip_file.write(response.data)
+        gzip_file.close()
+
+        compressed_response = make_response(gzip_buffer.getvalue())
+        compressed_response.headers['Content-Encoding'] = 'gzip'
+        return compressed_response
+
+    return response
 
 
 @app.route('/')
