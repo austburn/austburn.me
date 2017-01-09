@@ -189,10 +189,6 @@ a.post-link:active, a.post-link:hover {
   color: #edbb4e !important;
 }
 
-.custom-bash .hljs-built_in {
-  color: #906090 !important;
-}
-
 .custom-bash .hljs-variable {
   color: #16a085 !important;
 }
