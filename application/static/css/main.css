@@ -39,12 +39,6 @@ td:first-of-type {
 }
 
 #me {
-  background-image: url(../img/austin.jpg);
-  background-position: 45% 25%;
-  background-size: 100%;
-  width: 90%;
-  height: 20%;
-  border-radius: 25%;
   margin-left: 5%;
   margin-bottom: 10%;
 }
