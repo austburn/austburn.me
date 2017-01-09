@@ -4,6 +4,7 @@
   "description": "austburn.me",
   "scripts": {
     "build": "babel src -d static/js",
+    "minify_css": "minify -o static/css/main.min.css static/css/main.css",
     "lint": "eslint src"
   },
   "author": "Austin Burnett",
@@ -12,6 +13,7 @@
     "babel-eslint": "^6.1.2",
     "babel-plugin-transform-es2015-template-literals": "^6.8.0",
     "babel-preset-latest": "^6.16.0",
-    "eslint": "^3.11.1"
+    "eslint": "^3.11.1",
+    "minifier": "^0.8.0"
   }
 }

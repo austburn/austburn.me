@@ -4,3 +4,4 @@ bower_components
 env
 drafts
 node_modules
+*.min.*
