@@ -41,7 +41,7 @@ def index():
     return render_template(
         'base.html',
         post=session.query(Post).order_by(Post.date.desc()).first(),
-        title='@austburn'
+        title='Austin Burnett - Blog'
     )
 
 
@@ -49,7 +49,7 @@ def index():
 def about():
     return render_template(
         'about.html',
-        title='@austburn - About Me'
+        title='About Me'
     )
 
 
