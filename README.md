@@ -21,8 +21,12 @@ node_name ansible_user=austin ansible_host=ip
 
 ## Deploy Container
 
-`ansible-playbook webservers.yml -e "git_revision=..."`
+`make gr=<git_revision> deploy_test`
 
 The git revision, last commit hash, and CIRCLE_SHA1 should all be the same.
 
-General health of the node can be determined by `curl https://<ip> -k`
+General health of the test node can be determined by `curl https://austburn.me -H "X-Use-Test: true"`.
+
+Assuming all is well:
+
+`make gr=<git_revision> deploy_production`
