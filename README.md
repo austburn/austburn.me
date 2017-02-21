@@ -3,16 +3,28 @@ austburn.me
 
 Welcome to my [personal blog's](https://austburn.me) repository.
 
+# Up and Running
+
+## Requirements
+
+* `ansible`
+* `docker`
+
+## Galaxy
+
+`ansible-galaxy install -r roles.txt -p roles`
+
 # Runbook
 
 Here are some operational tasks for bootstrapping a node.
 
-## Bootstrap
+## Bootstrap New Node
 
-`ansible-playbook bootstrap.yml --limit node_name`
 ```
 node_name ansible_user=root ansible_host=ip
 ```
+`ansible-playbook bootstrap.yml --limit node_name`
+
 Add SSH key to Github.
 
 ```
