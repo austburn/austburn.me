@@ -1,6 +1,14 @@
 ---
+- name: grab all hosts
+  hosts: all
+  gather_facts: true
+  tasks:
+    - name: grab postgres ip
+      set_fact:
+        postgres_ip: "{{ hostvars['austburn.postgres']['ansible_eth2']['ipv4']['address'] }}"
+
 - name: Install docker, nginx, and application
-  hosts: webservers
+  hosts: "webservers:&{{ app_env }}"
   serial: 1
   become: true
   become_user: root

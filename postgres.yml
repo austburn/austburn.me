@@ -1,10 +1,14 @@
 ---
 - name: Install postgres
   hosts: postgres
-  gather_facts: true
   become: true
   become_user: root
-  tasks:
+  vars:
+    postgresql_listen_addresses: ["{{ ansible_eth2.ipv4.address }}"]
+    postgresql_users:
+      - name: "{{ pg_user }}"
+        pass: "{{ pg_password }}"
+        encrypted: no
 
   roles:
-    - { role: ANXS.postgresql , postgresql_listen_addresses: ["{{ ansible_eth2.ipv4.address }}"] }
+    - { role: ANXS.postgresql }
