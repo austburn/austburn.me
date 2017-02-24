@@ -3,3 +3,4 @@ docker_user: "{{ vault_docker_user }}"
 docker_password: "{{ vault_docker_password }}"
 pg_user: "{{ vault_pg_user }}"
 pg_password: "{{ vault_pg_password }}"
+private_network_cidr: 192.168.4.0/28

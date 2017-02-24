@@ -1,7 +1,6 @@
 ---
 - name: grab all hosts
   hosts: all
-  gather_facts: true
   tasks:
     - name: grab postgres ip
       set_fact:

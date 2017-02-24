@@ -9,6 +9,11 @@
       - name: "{{ pg_user }}"
         pass: "{{ pg_password }}"
         encrypted: no
+    postgresql_databases:
+      - name: blog
+        owner: "{{ pg_user }}"
+    postgresql_pg_hba_custom:
+      - { type: host,  database: all, user: "{{ pg_user }}", address: "{{ private_network_cidr }}", method: 'password', comment: 'eth2 connections' }
 
   roles:
     - { role: ANXS.postgresql }
