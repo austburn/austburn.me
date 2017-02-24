@@ -35,7 +35,7 @@ db:
 	docker run --detach --env POSTGRES_USER=local --env POSTGRES_PASSWORD=local --name postgres postgres
 
 deploy_test:
-	ansible-playbook webservers.yml --limit test -e "git_revision=$(gr)"
+	ansible-playbook webservers.yml -e "git_revision=$(gr)" -e "app_env=test"
 
 deploy_production:
-	ansible-playbook webservers.yml --limit production -e "git_revision=$(gr)"
+	ansible-playbook webservers.yml -e "git_revision=$(gr)" -e "app_env=production"
