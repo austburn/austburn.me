@@ -33,4 +33,4 @@
 - name: install docker-py
   become: true
   become_user: root
-  pip: name=docker-py state=present
+  pip: name=docker-py state=latest
