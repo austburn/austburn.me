@@ -71,14 +71,16 @@ resource "aws_key_pair" "austburn" {
 }
 
 resource "aws_instance" "ecs_instance" {
-  ami                   = "${var.ecs_ami}"
-  instance_type         = "t2.micro"
-  iam_instance_profile  = "${aws_iam_instance_profile.ecs.name}"
-  user_data             = "${data.template_file.cloud_config.rendered}"
-  count                 = "${length(var.azs)}"
-  availability_zone     = "${element(var.azs, count.index)}"
-  key_name              = "${var.key_name}"
-
+  ami                         = "${var.ecs_ami}"
+  instance_type               = "t2.micro"
+  iam_instance_profile        = "${aws_iam_instance_profile.ecs.name}"
+  user_data                   = "${data.template_file.cloud_config.rendered}"
+  count                       = "${length(var.azs)}"
+  availability_zone           = "${element(var.azs, count.index)}"
+  subnet_id                   = "${element(aws_subnet.subnet.*.id, count.index)}"
+  key_name                    = "${var.key_name}"
+  associate_public_ip_address = true
+  vpc_security_group_ids      = ["${aws_security_group.ecs.id}"]
   tags {
     Name = "ecs"
   }

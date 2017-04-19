@@ -13,14 +13,35 @@ resource "aws_internet_gateway" "gw" {
   vpc_id   = "${aws_vpc.blog.id}"
 }
 
-resource "aws_eip" "nat_eip" {
-  vpc      = true
-  count    = "${length(var.azs)}"
+resource "aws_route_table" "main" {
+  vpc_id = "${aws_vpc.blog.id}"
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = "${aws_internet_gateway.gw.id}"
+  }
 }
 
-resource "aws_nat_gateway" "gw" {
-  allocation_id = "${element(aws_eip.nat_eip.*.id, count.index)}"
-  subnet_id     = "${element(aws_subnet.subnet.*.id, count.index)}"
-  count         = "${length(var.azs)}"
-  depends_on    = ["aws_internet_gateway.gw"]
+resource "aws_route_table_association" "rt" {
+  count           = "${length(var.azs)}"
+  subnet_id       = "${element(aws_subnet.subnet.*.id, count.index)}"
+  route_table_id  = "${aws_route_table.main.id}"
+}
+
+resource "aws_security_group" "ecs" {
+  name    = "ecs"
+  vpc_id  = "${aws_vpc.blog.id}"
+
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port       = 0
+    to_port         = 0
+    protocol        = "-1"
+    cidr_blocks     = ["0.0.0.0/0"]
+  }
 }
