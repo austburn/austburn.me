@@ -1,0 +1,8 @@
+---
+- name: Configure ECS Instances
+  hosts: ecs
+  become: true
+  become_user: root
+
+  roles:
+    - ecs
