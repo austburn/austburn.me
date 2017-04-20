@@ -194,10 +194,28 @@ resource "aws_ecs_service" "web" {
 
 resource "aws_ecs_task_definition" "web" {
   family                = "service"
-  container_definitions = "${file("task-definitions/web.json")}"
+  container_definitions = "${file("${path.module}/task-definitions/web.json")}"
 
   placement_constraints {
     type       = "memberOf"
     expression = "attribute:ecs.availability-zone in [${join(",", var.azs)}]"
   }
+}
+
+resource "aws_db_subnet_group" "blog" {
+  name       = "blog"
+  subnet_ids = ["${aws_subnet.subnet.*.id}"]
+}
+
+resource "aws_db_instance" "blog" {
+  allocated_storage       = 5
+  storage_type            = "standard"
+  engine                  = "postgres"
+  engine_version          = "9.6.1"
+  instance_class          = "db.t2.micro"
+  name                    = "blog"
+  username                = "${var.db_user}"
+  password                = "${var.db_password}"
+  db_subnet_group_name    = "blog"
+  vpc_security_group_ids  = ["${aws_security_group.db.id}"]
 }

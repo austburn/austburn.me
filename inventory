@@ -4,8 +4,8 @@ austburn.2.me ansible_user=austin ansible_host=162.209.99.124
 austburn.test.me ansible_user=austin ansible_host=162.209.106.46
 austburn.registry ansible_user=austin ansible_host=162.209.103.70
 
-austburn.ecs.1 ansible_user=austburn ansible_host=13.58.36.84
-austburn.ecs.2 ansible_user=austburn ansible_host=52.15.139.210
+austburn.ecs.1 ansible_user=austburn ansible_host=13.58.29.239
+austburn.ecs.2 ansible_user=austburn ansible_host=52.14.218.139
 
 [haproxy]
 austburn.me
