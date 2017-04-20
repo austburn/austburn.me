@@ -28,3 +28,13 @@ deploy_test:
 
 deploy_production:
 	ansible-playbook webservers.yml -e "git_revision=$(gr)" -e "app_env=production"
+
+tf_plan:
+	ansible-vault decrypt terraform.tfvars
+	./terraform plan tf/
+	ansible-vault encrypt terraform.tfvars
+
+tf_apply:
+	ansible-vault decrypt terraform.tfvars
+	./terraform apply tf/
+	ansible-vault encrypt terraform.tfvars
