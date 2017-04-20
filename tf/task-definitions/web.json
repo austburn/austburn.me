@@ -1,0 +1,15 @@
+[
+  {
+    "name": "web",
+    "image": "registry.austburn.me/austburn.app:5613a0620181948f90e7e006bdbd153f7b9f02a6",
+    "cpu": 10,
+    "memory": 512,
+    "essential": true,
+    "portMappings": [
+      {
+        "containerPort": 5050,
+        "hostPort": 5050
+      }
+    ]
+  }
+]

@@ -40,6 +40,52 @@ resource "aws_iam_role_policy" "ecs_policy" {
 }
 EOF
 }
+
+resource "aws_iam_role" "ecs_service" {
+  name = "ecs_role"
+
+  assume_role_policy = <<EOF
+{
+  "Version": "2008-10-17",
+  "Statement": [
+    {
+      "Sid": "",
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "ecs.amazonaws.com"
+      },
+      "Action": "sts:AssumeRole"
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_role_policy" "ecs_service" {
+  name = "ecs_policy"
+  role = "${aws_iam_role.ecs_service.name}"
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "ec2:Describe*",
+        "elasticloadbalancing:DeregisterInstancesFromLoadBalancer",
+        "elasticloadbalancing:DeregisterTargets",
+        "elasticloadbalancing:Describe*",
+        "elasticloadbalancing:RegisterInstancesWithLoadBalancer",
+        "elasticloadbalancing:RegisterTargets"
+      ],
+      "Resource": "*"
+    }
+  ]
+}
+EOF
+}
+
 resource "aws_iam_instance_profile" "ecs" {
   name  = "ecs-instance-profile"
   role  = "${aws_iam_role.ecsInstanceRole.name}"
@@ -86,25 +132,72 @@ resource "aws_instance" "ecs_instance" {
   }
 }
 
+resource "aws_alb" "web" {
+  name            = "web-alb"
+  internal        = false
+  security_groups = ["${aws_security_group.alb.id}"]
+  subnets         = ["${aws_subnet.subnet.*.id}"]
 
-# resource "aws_ecs_cluster" "cluster" {
-#     name = "${var.cluster_name}"
-# }
+  enable_deletion_protection = true
+}
 
-# resource "aws_ecs_service" "web" {
-#     name          = "web-service"
-#     cluster       = "${aws_ecs_cluster.cluster.id}"
-#     desired_count = 2
-#     iam_role      = "${aws_iam_role.ecsInstanceRole.arn}"
-#     depends_on    = ["aws_iam_role_policy.ecs_policy"]
+resource "aws_alb_target_group" "ecs" {
+  name     = "alb-ecs-target"
+  port     = 5050
+  protocol = "HTTP"
+  vpc_id   = "${aws_vpc.blog.id}"
+}
 
-#     placement_strategy {
-#         type  = "binpack"
-#         field = "cpu"
-#     }
+resource "aws_alb_listener" "http" {
+  load_balancer_arn = "${aws_alb.web.arn}"
+  port              = "80"
+  protocol          = "HTTP"
 
-#     placement_constraints {
-#         type       = "memberOf"
-#         expression = "attribute:ecs.availability-zone in [us-east-2a, us-east-2b]"
-#     }
-# }
+  default_action {
+    target_group_arn = "${aws_alb_target_group.ecs.arn}"
+    type             = "forward"
+  }
+}
+
+resource "aws_ecs_cluster" "cluster" {
+    name = "${var.cluster_name}"
+}
+
+resource "aws_ecs_service" "web" {
+  name            = "web-service"
+  cluster         = "${aws_ecs_cluster.cluster.id}"
+  task_definition = "${aws_ecs_task_definition.web.arn}"
+  desired_count   = 2
+  iam_role        = "${aws_iam_role.ecs_service.name}"
+
+  load_balancer {
+    target_group_arn = "${aws_alb_target_group.ecs.id}"
+    container_name   = "web"
+    container_port   = "5050"
+  }
+
+  placement_strategy {
+    type  = "binpack"
+    field = "cpu"
+  }
+
+  placement_constraints {
+    type       = "memberOf"
+    expression = "attribute:ecs.availability-zone in [${join(",", var.azs)}]"
+  }
+
+  depends_on = [
+    "aws_iam_role_policy.ecs_service",
+    "aws_alb_listener.http"
+  ]
+}
+
+resource "aws_ecs_task_definition" "web" {
+  family                = "service"
+  container_definitions = "${file("task-definitions/web.json")}"
+
+  placement_constraints {
+    type       = "memberOf"
+    expression = "attribute:ecs.availability-zone in [${join(",", var.azs)}]"
+  }
+}
