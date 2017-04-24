@@ -31,10 +31,10 @@ deploy_production:
 
 tf_plan:
 	ansible-vault decrypt terraform.tfvars
-	./terraform plan tf/
+	terraform plan tf || true
 	ansible-vault encrypt terraform.tfvars
 
 tf_apply:
 	ansible-vault decrypt terraform.tfvars
-	./terraform apply tf/
+	terraform apply tf || true
 	ansible-vault encrypt terraform.tfvars
