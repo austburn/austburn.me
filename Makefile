@@ -13,6 +13,7 @@ dev: img
 prod: img
 	docker run --rm --interactive --tty \
 			   --publish 5050:5050 \
+			   --env "USE_S3=true" \
 			   --link postgres:postgres \
 			   --name austburn-prod austburn.app
 
