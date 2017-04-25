@@ -107,7 +107,7 @@ resource "aws_ecs_service" "web" {
   }
 
   depends_on = [
-    "aws_iam_role_policy.ecs_service",
+    "aws_iam_role_policy.ecs_service_policy",
     "aws_alb_listener.http"
   ]
 }

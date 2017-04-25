@@ -1,5 +1,5 @@
-resource "aws_iam_role_policy" "ecs_policy" {
-  name = "ecs_policy"
+resource "aws_iam_role_policy" "ecs_instance_policy" {
+  name = "ecs_instance_policy"
   role = "${aws_iam_role.ecsInstanceRole.id}"
 
   policy = <<EOF
@@ -21,7 +21,8 @@ resource "aws_iam_role_policy" "ecs_policy" {
         "ecr:GetDownloadUrlForLayer",
         "ecr:BatchGetImage",
         "logs:CreateLogStream",
-        "logs:PutLogEvents"
+        "logs:PutLogEvents",
+        "s3:GetObject"
       ],
       "Resource": "*"
     }
@@ -94,8 +95,8 @@ resource "aws_iam_instance_profile" "bastion" {
   role  = "${aws_iam_role.bastion.name}"
 }
 
-resource "aws_iam_role_policy" "ecs_service" {
-  name = "ecs_policy"
+resource "aws_iam_role_policy" "ecs_service_policy" {
+  name = "ecs_service_policy"
   role = "${aws_iam_role.ecs_service.name}"
 
   policy = <<EOF
