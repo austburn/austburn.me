@@ -1,0 +1,13 @@
+---
+- name: template file
+  template:
+    src: templates/secrets.j2
+    dest: /secrets
+
+- name: s3 put
+  command: aws s3api put-object --bucket austburn.secrets --key secrets --body /secrets --region us-east-2 --server-side-encryption AES256
+
+- name: remove secrets
+  file:
+    path: /secrets
+    state: absent

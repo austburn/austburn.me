@@ -1,0 +1,8 @@
+---
+- name: Configure Bastion Instance
+  hosts: bastion
+  become: true
+  become_user: root
+
+  roles:
+    - bastion
