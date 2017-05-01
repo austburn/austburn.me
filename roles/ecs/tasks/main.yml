@@ -1,7 +1,0 @@
----
-- name: ecs config
-  blockinfile:
-    path: /etc/ecs/ecs.config
-    block: |
-      ECS_ENGINE_AUTH_TYPE=docker
-      ECS_ENGINE_AUTH_DATA={"https://registry.austburn.me":{"username":"{{ docker_user }}","password":"{{ docker_password }}","email":"{{ docker_email }}"}}

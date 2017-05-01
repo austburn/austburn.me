@@ -3,3 +3,6 @@ docker_user: "{{ vault_docker_user }}"
 docker_password: "{{ vault_docker_password }}"
 docker_email: "{{ vault_docker_email }}"
 private_network_cidr: 192.168.4.0/28
+cluster_name: blog
+ecs_engine_auth_type: docker
+registry: https://registry.austburn.me

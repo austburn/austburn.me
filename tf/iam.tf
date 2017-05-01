@@ -22,7 +22,8 @@ resource "aws_iam_role_policy" "ecs_instance_policy" {
         "ecr:BatchGetImage",
         "logs:CreateLogStream",
         "logs:PutLogEvents",
-        "s3:GetObject"
+        "s3:GetObject",
+        "rds:DescribeDBInstances"
       ],
       "Resource": "*"
     }

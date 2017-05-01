@@ -3,3 +3,5 @@
 system_info:
   default_user:
     name: ${user}
+runcmd:
+    - yum update -y

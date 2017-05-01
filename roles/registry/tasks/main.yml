@@ -20,7 +20,7 @@
 - name: start registry
   docker_container:
     name: registry
-    image: registry:2
+    image: registry:latest
     state: started
     restart: yes
     restart_policy: always

@@ -1,13 +1,22 @@
 ---
-- name: template file
+- name: template files
   template:
-    src: templates/secrets.j2
-    dest: /secrets
+    src: "templates/{{ item }}.j2"
+    dest: "/{{ item }}"
+  with_items:
+    - secrets
+    - ecs
 
 - name: s3 put
-  command: aws s3api put-object --bucket austburn.secrets --key secrets --body /secrets --region us-east-2 --server-side-encryption AES256
+  command: "aws s3api put-object --bucket austburn.secrets --key {{ item }} --body /{{ item }} --region us-east-2 --server-side-encryption AES256"
+  with_items:
+    - secrets
+    - ecs
 
-- name: remove secrets
+- name: remove files
   file:
-    path: /secrets
+    path: "/{{ item }}"
     state: absent
+  with_items:
+    - secrets
+    - ecs
