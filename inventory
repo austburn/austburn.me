@@ -6,7 +6,7 @@ austburn.registry ansible_user=austin ansible_host=162.209.103.70
 
 austburn.ecs.1 ansible_user=austburn ansible_host=10.0.8.187
 austburn.ecs.2 ansible_user=austburn ansible_host=10.0.10.18
-austburn.bastion ansible_user=austburn ansible_host=13.59.254.169
+austburn.bastion ansible_user=austburn ansible_host=13.58.83.45
 
 [haproxy]
 austburn.me
