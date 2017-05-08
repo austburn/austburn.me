@@ -3,12 +3,13 @@
     "name": "web",
     "image": "registry.austburn.me/austburn.app:a7e7ac62e222e635e1f23e46ae83590bd1345241",
     "cpu": 10,
-    "memory": 512,
+    "memory": 256,
     "essential": true,
     "environment": [
       {"name": "USE_S3", "value": "true"},
       {"name": "USE_RDS", "value": "true"}
     ],
+    "networkMode": "host",
     "portMappings": [
       {
         "containerPort": 5050,

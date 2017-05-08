@@ -4,8 +4,9 @@ resource "aws_vpc" "blog" {
 
 resource "aws_subnet" "public_subnet" {
   vpc_id            = "${aws_vpc.blog.id}"
-  cidr_block        = "${var.public_cidr}"
-  availability_zone = "us-east-2a"
+  count             = "${length(var.azs)}"
+  cidr_block        = "${lookup(var.public_cidrs, element(var.azs, count.index))}"
+  availability_zone = "${element(var.azs, count.index)}"
 }
 
 resource "aws_subnet" "private_subnet" {
@@ -21,11 +22,13 @@ resource "aws_internet_gateway" "gw" {
 
 resource "aws_eip" "nat" {
   vpc   = true
+  count = "${length(var.azs)}"
 }
 
 resource "aws_nat_gateway" "natgw" {
-  subnet_id     = "${aws_subnet.public_subnet.id}"
-  allocation_id = "${aws_eip.nat.id}"
+  subnet_id     = "${element(aws_subnet.public_subnet.*.id, count.index)}"
+  allocation_id = "${element(aws_eip.nat.*.id, count.index)}"
+  count         = "${length(var.azs)}"
   depends_on    = ["aws_internet_gateway.gw"]
 }
 
@@ -39,27 +42,29 @@ resource "aws_route_table" "main" {
 
 resource "aws_route_table" "private" {
   vpc_id = "${aws_vpc.blog.id}"
+  count  = "${length(var.azs)}"
   route {
     cidr_block = "0.0.0.0/0"
-    nat_gateway_id = "${aws_nat_gateway.natgw.id}"
+    nat_gateway_id = "${element(aws_nat_gateway.natgw.*.id, count.index)}"
   }
 }
 
-resource "aws_route_table_association" "rt" {
-  subnet_id       = "${aws_subnet.public_subnet.id}"
+resource "aws_route_table_association" "public_rt" {
+  count          = "${length(var.azs)}"
+  subnet_id       = "${element(aws_subnet.public_subnet.*.id, count.index)}"
   route_table_id  = "${aws_route_table.main.id}"
 }
 
 resource "aws_route_table_association" "private_rt" {
   count          = "${length(var.azs)}"
   subnet_id      = "${element(aws_subnet.private_subnet.*.id, count.index)}"
-  route_table_id = "${aws_route_table.private.id}"
+  route_table_id = "${element(aws_route_table.private.*.id, count.index)}"
 }
 
 resource "aws_vpc_endpoint" "private_s3" {
   vpc_id          = "${aws_vpc.blog.id}"
   service_name    = "com.amazonaws.${var.region}.s3"
-  route_table_ids = ["${aws_route_table.main.id}", "${aws_route_table.private.id}"]
+  route_table_ids = ["${aws_route_table.main.id}", "${aws_route_table.private.*.id}"]
 }
 
 resource "aws_security_group" "bastion" {
