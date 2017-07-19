@@ -10,10 +10,6 @@ Welcome to my [personal blog's](https://austburn.me) repository.
 * `ansible`
 * `docker`
 
-## Galaxy
-
-`ansible-galaxy install -r roles.txt -p roles`
-
 # Runbook
 
 Here are some operational tasks for bootstrapping a node.

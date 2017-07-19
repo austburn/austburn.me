@@ -10,8 +10,6 @@ RUN apk add --update --no-cache \
     linux-headers \
     nodejs \
     pcre-dev \
-    postgresql-dev \
-    py-psycopg2 \
     unzip
 
 WORKDIR /application
