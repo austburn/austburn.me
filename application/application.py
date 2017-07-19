@@ -3,9 +3,10 @@ from flask import Flask, render_template, send_file, request
 from cStringIO import StringIO
 import gzip
 
-from migrations.db import Post, session
+from post_manager import PostManager
 
 app = Flask(__name__, static_folder='static')
+post_manager = PostManager()
 handler = FileHandler('/var/log/flask.log')
 app.logger.addHandler(handler)
 
@@ -40,7 +41,7 @@ def after_request(response):
 def index():
     return render_template(
         'base.html',
-        post=session.query(Post).order_by(Post.date.desc()).first(),
+        post=post_manager.get_posts_by_date()[0],
         title='Austin Burnett - Blog'
     )
 
@@ -57,18 +58,20 @@ def about():
 def posts():
     return render_template(
         'posts.html',
-        posts=session.query(Post).order_by(Post.date.desc()),
+        posts=post_manager.get_posts_by_date(),
         title='Posts'
     )
 
 
-@app.route('/posts/<post_id>')
-def post(post_id):
-    post = session.query(Post).filter(Post.tag == post_id).one()
+@app.route('/posts/<tag>')
+def post_by_tag(tag):
+    post = post_manager.get_post_by_tag(tag)
+    if not post:
+        raise Exception('{} tag not found.'.format(tag))
     return render_template(
         'base.html',
         post=post,
-        title=post.title
+        title=post['title']
     )
 
 

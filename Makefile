@@ -7,8 +7,7 @@ dev: img
 	docker run --interactive --tty \
 			   --restart always \
 			   --publish 5050:5050 \
-			   --link postgres:postgres \
-			   --name austburn-dev austburn.app sh -c "source /env/bin/activate && python migrations/posts.py && python runserver.py"
+			   --name austburn-dev austburn.app sh -c "source /env/bin/activate && python runserver.py"
 
 prod: img
 	docker run --rm --interactive --tty \
