@@ -86,6 +86,10 @@ td:first-of-type {
   margin-left: 5px;
 }
 
+.post-wrapper {
+  position: relative;
+}
+
 .post .heading {
   text-transform: uppercase;
   font-weight: 400;
@@ -133,7 +137,9 @@ a.post-link:active, a.post-link:hover {
 }
 
 .date {
-  margin-left: 20px;
+  position: absolute;
+  bottom: 0;
+  right: 0;
 }
 
 .gist {

@@ -3,7 +3,6 @@ austburn.1.me ansible_user=austin ansible_host=162.209.103.88
 austburn.2.me ansible_user=austin ansible_host=162.209.99.124
 austburn.test.me ansible_user=austin ansible_host=162.209.106.46
 austburn.registry ansible_user=austin ansible_host=162.209.103.70
-austburn.postgres ansible_user=austin ansible_host=104.130.24.76
 
 [haproxy]
 austburn.me
@@ -22,6 +21,3 @@ austburn.test.me
 
 [registry]
 austburn.registry
-
-[postgres]
-austburn.postgres

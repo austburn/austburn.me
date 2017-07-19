@@ -3,5 +3,5 @@ date:
   year:   2016
   month:  8
   day:    12
-gist: "Making a dynamic Logstash container with confd."
+gist: Making a dynamic Logstash container with confd.
 post: logstash_confd.html

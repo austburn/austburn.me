@@ -19,13 +19,4 @@
     restart_policy: always
     ports:
       - "{{ ansible_eth2.ipv4.address }}:5050:5050"
-    etc_hosts: { 'postgres': "{{ postgres_ip }}" }
     expose: 5050
-    env:
-      POSTGRES_USER: "{{ pg_user }}"
-      POSTGRES_PASSWORD: "{{ pg_password }}"
-
-- name: remove postgres
-  docker_container:
-    name: postgres
-    state: absent

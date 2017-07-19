@@ -5,4 +5,3 @@ env
 drafts
 node_modules
 *.min.*
-roles/ANXS.postgresql
