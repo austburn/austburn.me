@@ -1,6 +1,3 @@
-variable "db_user"          {}
-variable "db_password"      {}
-
 variable "ami" {
   default = {
     "ecs" = "ami-62745007"
