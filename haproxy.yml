@@ -1,0 +1,10 @@
+---
+- name: Install haproxy
+  hosts: haproxy
+  become: true
+  become_user: root
+
+  roles:
+    - common
+    - letsencrypt
+    - haproxy

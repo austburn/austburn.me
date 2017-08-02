@@ -1,0 +1,22 @@
+---
+- name: log into private registry
+  docker_login:
+    registry: registry.austburn.me
+    username: "{{ docker_user }}"
+    password: "{{ docker_password }}"
+
+- name: pull docker image
+  docker_image:
+    name: registry.austburn.me/austburn.app
+    tag: "{{ git_revision }}"
+
+- name: start application
+  docker_container:
+    name: austburn-prod
+    image: "registry.austburn.me/austburn.app:{{ git_revision }}"
+    state: started
+    recreate: yes
+    restart_policy: always
+    ports:
+      - "{{ ansible_eth2.ipv4.address }}:5050:5050"
+    expose: 5050
