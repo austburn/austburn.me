@@ -61,12 +61,6 @@ resource "aws_route_table_association" "private_rt" {
   route_table_id = "${element(aws_route_table.private.*.id, count.index)}"
 }
 
-resource "aws_vpc_endpoint" "private_s3" {
-  vpc_id          = "${aws_vpc.blog.id}"
-  service_name    = "com.amazonaws.${var.region}.s3"
-  route_table_ids = ["${aws_route_table.main.id}", "${aws_route_table.private.*.id}"]
-}
-
 resource "aws_security_group" "bastion" {
   name    = "bastion"
   vpc_id  = "${aws_vpc.blog.id}"

@@ -1,3 +1,14 @@
+variable "docker_user" {}
+variable "docker_password" {}
+variable "docker_email" {}
+
+variable "cluster_name" {
+  default = "blog"
+}
+variable "registry" {
+  default = "https://registry.austburn.me"
+}
+
 variable "ami" {
   default = {
     "ecs" = "ami-62745007"
@@ -11,10 +22,6 @@ variable "user" {
 
 variable "key_name" {
   default = "austburn_key"
-}
-
-variable "cluster_name" {
-  default = "blog"
 }
 
 variable "region" {
@@ -43,19 +50,23 @@ variable "private_cidrs" {
   }
 }
 
-data "template_file" "bastion_cloud_config" {
-  template = "${file("${path.module}/cloud_config/bastion.yml")}"
-
-  vars {
-    user   = "${var.user}"
-  }
-}
-
 data "template_file" "ecs_cloud_config" {
-  template       = "${file("${path.module}/cloud_config/ecs.yml")}"
+  template       = "${file("${path.module}/templates/cloud_config.yml")}"
 
   vars {
     user         = "${var.user}"
     cluster_name = "${var.cluster_name}"
+  }
+}
+
+data "template_file" "ecs_agent_config" {
+  template = "${file("${path.module}/templates/ecs.config")}"
+
+  vars {
+    cluster_name    = "${var.cluster_name}"
+    registry        = "${var.registry}"
+    docker_user     = "${var.docker_user}"
+    docker_password = "${var.docker_password}"
+    docker_email    = "${var.docker_email}"
   }
 }

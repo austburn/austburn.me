@@ -1,9 +1,9 @@
 [
   {
     "name": "web",
-    "image": "registry.austburn.me/austburn.app:a7e7ac62e222e635e1f23e46ae83590bd1345241",
+    "image": "registry.austburn.me/austburn.app:bb5f1a86b0cdd51e3cb1b43a38b4349ea62a0f5a",
     "cpu": 10,
-    "memory": 256,
+    "memory": 100,
     "essential": true,
     "networkMode": "host",
     "portMappings": [
