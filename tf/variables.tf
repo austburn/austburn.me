@@ -1,12 +1,18 @@
 variable "docker_user" {}
 variable "docker_password" {}
 variable "docker_email" {}
+variable "git_hash" {}
 
 variable "cluster_name" {
   default = "blog"
 }
+
 variable "registry" {
   default = "https://registry.austburn.me"
+}
+
+variable "image_name" {
+  default = "austburn.app"
 }
 
 variable "ami" {
@@ -68,5 +74,15 @@ data "template_file" "ecs_agent_config" {
     docker_user     = "${var.docker_user}"
     docker_password = "${var.docker_password}"
     docker_email    = "${var.docker_email}"
+  }
+}
+
+data "template_file" "web_task_definition" {
+  template = "${file("${path.module}/templates/web-task-def.json")}"
+
+  vars {
+    registry    = "${var.registry}"
+    image_name  = "${var.image_name}"
+    git_hash    = "${var.git_hash}"
   }
 }

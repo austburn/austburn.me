@@ -110,7 +110,7 @@ resource "aws_ecs_service" "web" {
 
 resource "aws_ecs_task_definition" "web" {
   family                = "service"
-  container_definitions = "${file("${path.module}/task-definitions/web.json")}"
+  container_definitions = "${data.template_file.web_task_definition.rendered}"
 
   placement_constraints {
     type       = "memberOf"

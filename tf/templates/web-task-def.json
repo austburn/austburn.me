@@ -1,7 +1,7 @@
 [
   {
     "name": "web",
-    "image": "registry.austburn.me/austburn.app:bb5f1a86b0cdd51e3cb1b43a38b4349ea62a0f5a",
+    "image": "${registry}/${image_name}:${git_hash}",
     "cpu": 10,
     "memory": 100,
     "essential": true,
