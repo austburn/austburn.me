@@ -1,0 +1,3 @@
+---
+domain: austburn.me
+letsencrypt_hooks: '--pre-hook "sudo service haproxy stop" --post-hook "sudo service haproxy start"'

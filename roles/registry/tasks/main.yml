@@ -18,16 +18,15 @@
   iptables: chain=INPUT destination_port=443 protocol=tcp jump=ACCEPT
 
 - name: start registry
-  docker_container:
+  docker:
     name: registry
-    image: registry:latest
-    state: started
-    restart: yes
+    image: registry:2
+    state: reloaded
     restart_policy: always
     volumes:
       - /home/austin/certs:/certs
       - /home/austin/htpasswd:/auth/htpasswd
-    published_ports:
+    ports:
       - "{{ ansible_eth0.ipv4.address }}:443:5000"
     env:
       REGISTRY_HTTP_TLS_CERTIFICATE: /certs/fullchain.pem
