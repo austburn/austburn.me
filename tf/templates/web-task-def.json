@@ -6,6 +6,9 @@
     "memory": 100,
     "essential": true,
     "networkMode": "host",
+    "environment": [
+      { "name" : "GIT_HASH", "value": "${git_hash}" }
+    ],
     "portMappings": [
       {
         "containerPort": 5050,

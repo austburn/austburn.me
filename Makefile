@@ -5,6 +5,7 @@ img:
 
 dev: img
 	docker run --interactive --tty \
+			   --env "GIT_HASH=local" \
 			   --restart always \
 			   --publish 5050:5050 \
 			   --name austburn-dev austburn.app sh -c "source /env/bin/activate && python runserver.py"
