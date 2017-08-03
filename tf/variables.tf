@@ -7,18 +7,9 @@ variable "cluster_name" {
   default = "blog"
 }
 
-variable "registry" {
-  default = "https://registry.austburn.me"
-}
-
-variable "image_name" {
-  default = "austburn.app"
-}
-
 variable "ami" {
   default = {
     "ecs" = "ami-62745007"
-    "bastion" = "ami-4191b524"
   }
 }
 
@@ -65,24 +56,11 @@ data "template_file" "ecs_cloud_config" {
   }
 }
 
-data "template_file" "ecs_agent_config" {
-  template = "${file("${path.module}/templates/ecs.config")}"
-
-  vars {
-    cluster_name    = "${var.cluster_name}"
-    registry        = "${var.registry}"
-    docker_user     = "${var.docker_user}"
-    docker_password = "${var.docker_password}"
-    docker_email    = "${var.docker_email}"
-  }
-}
-
 data "template_file" "web_task_definition" {
-  template = "${file("${path.module}/templates/web-task-def.json")}"
+  template      = "${file("${path.module}/templates/web-task-def.json")}"
 
   vars {
-    registry    = "${var.registry}"
-    image_name  = "${var.image_name}"
+    repository  = "${aws_ecr_repository.austburn.repository_url}"
     git_hash    = "${var.git_hash}"
   }
 }

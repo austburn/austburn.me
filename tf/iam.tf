@@ -21,8 +21,7 @@ resource "aws_iam_role_policy" "ecs_instance_policy" {
         "ecr:GetDownloadUrlForLayer",
         "ecr:BatchGetImage",
         "logs:CreateLogStream",
-        "logs:PutLogEvents",
-        "s3:GetObject"
+        "logs:PutLogEvents"
       ],
       "Resource": "*"
     }
@@ -99,53 +98,6 @@ resource "aws_iam_role" "ecsInstanceRole" {
   ]
 }
 EOF
-}
-
-data "aws_iam_policy_document" "s3_bucket_policy" {
-  statement {
-    actions     = ["s3:GetObject"]
-    effect      = "Allow"
-    resources   = ["arn:aws:s3:::${var.secret_bucket}/*"]
-    principals {
-      type        = "AWS"
-      identifiers = ["${aws_iam_role.ecsInstanceRole.arn}"]
-    }
-  }
-
-  statement {
-    sid         = "DenyUnEncryptedInflightOperations"
-    actions     = ["s3:*"]
-
-    resources   = ["arn:aws:s3:::${var.secret_bucket}/*"]
-
-    condition = {
-      test      = "Bool"
-      variable  = "aws:secureTransport"
-      values    = [false]
-    }
-
-    principals = {
-      type        = "AWS"
-      identifiers = ["*"]
-    }
-  }
-
-  statement {
-    sid         = "DenyUnEncryptedObjectUploads"
-    actions     = ["s3:PutObject"]
-    effect      = "Deny"
-    resources   = ["arn:aws:s3:::${var.secret_bucket}/*"]
-
-    condition = {
-      test      = "StringNotEquals"
-      variable  = "s3:x-amz-server-side-encryption"
-      values    = ["AES256"]
-    }
-    principals = {
-      type        = "AWS"
-      identifiers = ["*"]
-    }
-  }
 }
 
 resource "aws_iam_user" "circle_ci_user" {
