@@ -5,7 +5,7 @@ machine:
 dependencies:
   override:
     - make img
-    - pip install awscli
+    - pip install --upgrade awscli
 
 test:
   override:
