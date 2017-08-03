@@ -19,3 +19,5 @@ deployment:
       - docker tag austburn.app registry.austburn.me/austburn.app:$CIRCLE_SHA1
       - docker push registry.austburn.me/austburn.app
       - aws ecr get-login --no-include-email --region us-east-2 | sh
+      - docker tag austburn.app 296307749888.dkr.ecr.us-east-2.amazonaws.com/austburn:$CIRCLE_SHA1
+      - docker push 296307749888.dkr.ecr.us-east-2.amazonaws.com/austburn
