@@ -25,7 +25,7 @@ resource "aws_instance" "ecs_instance" {
   key_name                    = "${var.key_name}"
   vpc_security_group_ids      = ["${aws_security_group.ecs.id}"]
   depends_on                  = ["aws_nat_gateway.natgw"]
-  count                       = 1
+  count                       = "${length(var.azs)}"
   tags {
     Name = "ecs"
   }
