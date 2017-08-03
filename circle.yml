@@ -18,3 +18,4 @@ deployment:
       - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASSWORD https://registry.austburn.me
       - docker tag austburn.app registry.austburn.me/austburn.app:$CIRCLE_SHA1
       - docker push registry.austburn.me/austburn.app
+      - aws ecr get-login --no-include-email --region us-east-2 | sh
