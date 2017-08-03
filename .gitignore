@@ -7,3 +7,5 @@ node_modules
 *.min.*
 .terraform/
 terraform.tfvars
+terraform.tfstate.backup
+
