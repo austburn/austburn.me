@@ -9,23 +9,6 @@ provider "aws" {
     region = "${var.region}"
 }
 
-resource "aws_s3_bucket" "secrets" {
-  bucket = "${var.secret_bucket}"
-  acl    = "private"
-  region = "${var.region}"
-  policy = "${data.aws_iam_policy_document.s3_bucket_policy.json}"
-
-  versioning {
-    enabled = true
-  }
-}
-
-resource "aws_s3_bucket_object" "ecs_agent_config" {
-  bucket = "${aws_s3_bucket.secrets.bucket}"
-  key    = "ecs"
-  content = "${data.template_file.ecs_agent_config.rendered}"
-  server_side_encryption = "AES256"
-}
 
 resource "aws_key_pair" "austburn" {
   key_name    = "${var.key_name}"

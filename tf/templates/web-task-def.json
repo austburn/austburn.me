@@ -1,7 +1,7 @@
 [
   {
     "name": "web",
-    "image": "${registry}/${image_name}:${git_hash}",
+    "image": "${repository}:${git_hash}",
     "cpu": 10,
     "memory": 100,
     "essential": true,
