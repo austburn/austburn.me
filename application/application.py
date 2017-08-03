@@ -6,7 +6,10 @@ import gzip
 from post_manager import PostManager
 
 app = Flask(__name__, static_folder='static')
+app.config.from_object('config')
+
 post_manager = PostManager()
+
 handler = FileHandler('/var/log/flask.log')
 app.logger.addHandler(handler)
 
@@ -78,6 +81,11 @@ def post_by_tag(tag):
 @app.route('/favicon.ico')
 def favicon():
     return send_file('static/img/favicon.ico')
+
+
+@app.route('/hash')
+def hash():
+    return app.config['GIT_HASH']
 
 
 @app.errorhandler(Exception)
