@@ -147,3 +147,32 @@ data "aws_iam_policy_document" "s3_bucket_policy" {
     }
   }
 }
+
+resource "aws_iam_user" "circle_ci_user" {
+  name = "circle_ci_user"
+}
+
+resource "aws_iam_user_policy" "circle_ci_push" {
+  name = "circle_ci_push"
+  user = "${aws_iam_user.circle_ci_user.name}"
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": [
+        "ecr:GetAuthorizationToken",
+        "ecr:DescribeRepositories",
+        "ecr:PutImage",
+        "ecr:InitiateLayerUpload",
+        "ecr:UploadLayerPart",
+        "ecr:CompleteLayerUpload"
+      ],
+      "Effect": "Allow",
+      "Resource": "*"
+    }
+  ]
+}
+EOF
+}

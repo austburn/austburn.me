@@ -75,8 +75,12 @@ resource "aws_alb_listener" "http" {
   }
 }
 
+resource "aws_ecr_repository" "austburn" {
+  name = "austburn"
+}
+
 resource "aws_ecs_cluster" "cluster" {
-    name = "${var.cluster_name}"
+  name = "${var.cluster_name}"
 }
 
 resource "aws_ecs_service" "web" {
