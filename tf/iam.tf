@@ -167,7 +167,8 @@ resource "aws_iam_user_policy" "circle_ci_push" {
         "ecr:PutImage",
         "ecr:InitiateLayerUpload",
         "ecr:UploadLayerPart",
-        "ecr:CompleteLayerUpload"
+        "ecr:CompleteLayerUpload",
+        "ecr:BatchCheckLayerAvailability"
       ],
       "Effect": "Allow",
       "Resource": "*"
