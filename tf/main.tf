@@ -75,6 +75,19 @@ resource "aws_alb_listener" "http" {
   }
 }
 
+resource "aws_alb_listener" "https" {
+  load_balancer_arn = "${aws_alb.web.arn}"
+  port              = "443"
+  protocol          = "HTTPS"
+  ssl_policy        = "ELBSecurityPolicy-2015-05"
+  certificate_arn   = "arn:aws:acm:us-east-2:296307749888:certificate/23b216b9-1006-45a6-bea0-021d7b8ddab2"
+
+  default_action {
+    target_group_arn = "${aws_alb_target_group.ecs.arn}"
+    type             = "forward"
+  }
+}
+
 resource "aws_ecr_repository" "austburn" {
   name = "austburn"
 }
