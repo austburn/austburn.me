@@ -1,0 +1,16 @@
+[
+  {
+    "name": "web",
+    "image": "${registry}/${image_name}:${git_hash}",
+    "cpu": 10,
+    "memory": 100,
+    "essential": true,
+    "networkMode": "host",
+    "portMappings": [
+      {
+        "containerPort": 5050,
+        "hostPort": 5050
+      }
+    ]
+  }
+]

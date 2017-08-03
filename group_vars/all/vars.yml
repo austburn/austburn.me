@@ -1,4 +1,0 @@
----
-docker_user: "{{ vault_docker_user }}"
-docker_password: "{{ vault_docker_password }}"
-private_network_cidr: 192.168.4.0/28

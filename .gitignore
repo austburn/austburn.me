@@ -5,3 +5,5 @@ env
 drafts
 node_modules
 *.min.*
+.terraform/
+terraform.tfvars
