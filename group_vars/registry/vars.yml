@@ -1,3 +1,0 @@
----
-domain: registry.austburn.me
-letsencrypt_hooks: '--pre-hook "docker stop registry" --post-hook "docker start registry"'
