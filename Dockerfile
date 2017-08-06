@@ -12,17 +12,15 @@ RUN apk add --update --no-cache \
     pcre-dev \
     unzip
 
-WORKDIR /application
 COPY application/requirements /requirements
 COPY application/package.json /tmp/package.json
 
-RUN pip install virtualenv
-RUN virtualenv /env
-RUN . /env/bin/activate; pip install -r /requirements
+RUN pip install -r /requirements
 RUN cd /tmp && npm install
 
 COPY application /application
+WORKDIR /application
 RUN mv /tmp/node_modules /application && npm run build && npm run minify_css
 
 ENV PYTHONPATH /application
-CMD . /env/bin/activate && uwsgi app.ini
+CMD uwsgi app.ini
