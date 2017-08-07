@@ -1,6 +1,3 @@
-variable "docker_user" {}
-variable "docker_password" {}
-variable "docker_email" {}
 variable "git_hash" {}
 
 variable "cluster_name" {

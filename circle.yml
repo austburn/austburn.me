@@ -6,10 +6,14 @@ dependencies:
   override:
     - make img
     - sudo pip install --upgrade awscli
+    - wget -O /tmp/terraform.zip https://releases.hashicorp.com/terraform/0.10.0/terraform_0.10.0_linux_amd64.zip
+    - unzip -d "${HOME}/bin" /tmp/terraform.zip
+
 
 test:
   override:
     - make test
+    - terraform plan
 
 deployment:
   master:
