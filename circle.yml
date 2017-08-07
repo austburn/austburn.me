@@ -13,7 +13,7 @@ dependencies:
 test:
   override:
     - make test
-    - terraform init tf && terraform plan tf
+    - terraform init tf && terraform plan -var 'git_hash=$CIRCLE_SHA1' tf
 
 deployment:
   master:
