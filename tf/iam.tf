@@ -120,7 +120,11 @@ resource "aws_iam_user_policy" "circle_ci_push" {
         "ecr:InitiateLayerUpload",
         "ecr:UploadLayerPart",
         "ecr:CompleteLayerUpload",
-        "ecr:BatchCheckLayerAvailability"
+        "ecr:BatchCheckLayerAvailability",
+        "ec2:*",
+        "ecs:*",
+        "route53:*",
+        "vpc:*"
       ],
       "Effect": "Allow",
       "Resource": "*"
@@ -128,4 +132,10 @@ resource "aws_iam_user_policy" "circle_ci_push" {
   ]
 }
 EOF
+}
+
+resource "aws_iam_policy_attachment" "circle_ci_read_only" {
+  name       = "circle_ci_read_only"
+  users      = ["${aws_iam_user.circle_ci_user.name}"]
+  policy_arn = "arn:aws:iam::aws:policy/ReadOnlyAccess"
 }

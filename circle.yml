@@ -6,10 +6,14 @@ dependencies:
   override:
     - make img
     - sudo pip install --upgrade awscli
+    - wget -O /tmp/terraform.zip https://releases.hashicorp.com/terraform/0.10.0/terraform_0.10.0_linux_amd64.zip
+    - unzip -d "${HOME}/bin" /tmp/terraform.zip
+
 
 test:
   override:
     - make test
+    - terraform init tf && terraform plan -var 'git_hash=$CIRCLE_SHA1' tf
 
 deployment:
   master:
@@ -18,3 +22,4 @@ deployment:
       - aws ecr get-login --region us-east-2 | sh
       - docker build --tag 296307749888.dkr.ecr.us-east-2.amazonaws.com/austburn:$CIRCLE_SHA1 .
       - docker push 296307749888.dkr.ecr.us-east-2.amazonaws.com/austburn:$CIRCLE_SHA1
+      - terraform apply -var 'git_hash=$CIRCLE_SHA1' tf
