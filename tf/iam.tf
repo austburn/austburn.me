@@ -124,7 +124,8 @@ resource "aws_iam_user_policy" "circle_ci_push" {
         "ec2:*",
         "ecs:*",
         "route53:*",
-        "vpc:*"
+        "vpc:*",
+        "s3:*"
       ],
       "Effect": "Allow",
       "Resource": "*"
