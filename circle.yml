@@ -22,3 +22,4 @@ deployment:
       - aws ecr get-login --region us-east-2 | sh
       - docker build --tag 296307749888.dkr.ecr.us-east-2.amazonaws.com/austburn:$CIRCLE_SHA1 .
       - docker push 296307749888.dkr.ecr.us-east-2.amazonaws.com/austburn:$CIRCLE_SHA1
+      - terraform apply -var 'git_hash=$CIRCLE_SHA1' tf

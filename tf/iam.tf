@@ -120,7 +120,11 @@ resource "aws_iam_user_policy" "circle_ci_push" {
         "ecr:InitiateLayerUpload",
         "ecr:UploadLayerPart",
         "ecr:CompleteLayerUpload",
-        "ecr:BatchCheckLayerAvailability"
+        "ecr:BatchCheckLayerAvailability",
+        "ec2:*",
+        "ecs:*",
+        "route53:*",
+        "vpc:*"
       ],
       "Effect": "Allow",
       "Resource": "*"
