@@ -36,7 +36,7 @@ resource "aws_alb" "web" {
   name                       = "web-alb"
   internal                   = false
   security_groups            = ["${aws_security_group.alb.id}"]
-  subnets                    = ["${aws_subnet.public_subnet.*.id}"]
+  subnets                    = ["${aws_subnet.private_subnet.*.id}"]
   enable_deletion_protection = true
 }
 
