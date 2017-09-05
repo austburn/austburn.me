@@ -121,21 +121,21 @@ resource "aws_iam_user_policy" "circle_ci_push" {
         "ecr:UploadLayerPart",
         "ecr:CompleteLayerUpload",
         "ecr:BatchCheckLayerAvailability",
+        "iam:PutUserPolicy",
         "ec2:*",
         "elasticloadbalancing:*",
         "ecs:*",
-        "iam:PutUserPolicy",
-        "iam:AddRoleToInstanceProfile",
-        "iam:CreateInstanceProfile",
-        "iam:PassRole",
-        "iam:DeleteInstanceProfile",
-        "iam:RemoveRoleFromInstanceProfile",
         "route53:*",
         "vpc:*",
         "s3:*"
       ],
       "Effect": "Allow",
       "Resource": "*"
+    },
+    {
+      "Effect": "Allow",
+      "Action": "iam:PassRole",
+      "Resource": "${aws_iam_role.ecsInstanceRole.arn}"
     }
   ]
 }
