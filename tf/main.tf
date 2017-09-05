@@ -17,15 +17,16 @@ resource "aws_key_pair" "austburn" {
 }
 
 resource "aws_instance" "ecs_instance" {
-  ami                    = "${var.ami["ecs"]}"
-  instance_type          = "t2.nano"
-  iam_instance_profile   = "${aws_iam_instance_profile.ecs.name}"
-  user_data              = "${data.template_file.ecs_cloud_config.rendered}"
-  availability_zone      = "${element(var.azs, count.index)}"
-  subnet_id              = "${element(aws_subnet.private_subnet.*.id, count.index)}"
-  key_name               = "${var.key_name}"
-  vpc_security_group_ids = ["${aws_security_group.ecs.id}"]
-  count                  = "${length(var.azs)}"
+  ami                         = "${var.ami["ecs"]}"
+  instance_type               = "t2.nano"
+  iam_instance_profile        = "${aws_iam_instance_profile.ecs.name}"
+  user_data                   = "${data.template_file.ecs_cloud_config.rendered}"
+  availability_zone           = "${element(var.azs, count.index)}"
+  subnet_id                   = "${element(aws_subnet.public_subnet.*.id, count.index)}"
+  key_name                    = "${var.key_name}"
+  vpc_security_group_ids      = ["${aws_security_group.ecs.id}"]
+  associate_public_ip_address = true
+  count                       = "${length(var.azs)}"
 
   tags {
     Name = "ecs"
@@ -36,7 +37,7 @@ resource "aws_alb" "web" {
   name                       = "web-alb"
   internal                   = false
   security_groups            = ["${aws_security_group.alb.id}"]
-  subnets                    = ["${aws_subnet.private_subnet.*.id}"]
+  subnets                    = ["${aws_subnet.public_subnet.*.id}"]
   enable_deletion_protection = true
 }
 
