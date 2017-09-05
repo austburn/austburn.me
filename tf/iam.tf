@@ -127,6 +127,7 @@ resource "aws_iam_user_policy" "circle_ci_push" {
         "iam:PutUserPolicy",
         "iam:AddRoleToInstanceProfile",
         "iam:CreateInstanceProfile",
+        "iam:PassRole",
         "iam:DeleteInstanceProfile",
         "iam:RemoveRoleFromInstanceProfile",
         "route53:*",
