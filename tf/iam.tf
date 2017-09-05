@@ -122,7 +122,9 @@ resource "aws_iam_user_policy" "circle_ci_push" {
         "ecr:CompleteLayerUpload",
         "ecr:BatchCheckLayerAvailability",
         "ec2:*",
+        "elasticloadbalancing:*",
         "ecs:*",
+        "iam:PutUserPolicy",
         "route53:*",
         "vpc:*",
         "s3:*"
