@@ -20,32 +20,11 @@ resource "aws_internet_gateway" "gw" {
   vpc_id   = "${aws_vpc.blog.id}"
 }
 
-resource "aws_eip" "nat" {
-  vpc   = true
-  count = "${length(var.azs)}"
-}
-
-resource "aws_nat_gateway" "natgw" {
-  subnet_id     = "${element(aws_subnet.public_subnet.*.id, count.index)}"
-  allocation_id = "${element(aws_eip.nat.*.id, count.index)}"
-  count         = "${length(var.azs)}"
-  depends_on    = ["aws_internet_gateway.gw"]
-}
-
 resource "aws_route_table" "main" {
   vpc_id = "${aws_vpc.blog.id}"
   route {
     cidr_block = "0.0.0.0/0"
     gateway_id = "${aws_internet_gateway.gw.id}"
-  }
-}
-
-resource "aws_route_table" "private" {
-  vpc_id = "${aws_vpc.blog.id}"
-  count  = "${length(var.azs)}"
-  route {
-    cidr_block = "0.0.0.0/0"
-    nat_gateway_id = "${element(aws_nat_gateway.natgw.*.id, count.index)}"
   }
 }
 
