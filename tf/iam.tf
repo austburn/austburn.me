@@ -125,6 +125,10 @@ resource "aws_iam_user_policy" "circle_ci_push" {
         "elasticloadbalancing:*",
         "ecs:*",
         "iam:PutUserPolicy",
+        "iam:AddRoleToInstanceProfile",
+        "iam:CreateInstanceProfile",
+        "iam:DeleteInstanceProfile",
+        "iam:RemoveRoleFromInstanceProfile",
         "route53:*",
         "vpc:*",
         "s3:*"
