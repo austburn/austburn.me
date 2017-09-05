@@ -25,7 +25,6 @@ resource "aws_instance" "ecs_instance" {
   subnet_id              = "${element(aws_subnet.private_subnet.*.id, count.index)}"
   key_name               = "${var.key_name}"
   vpc_security_group_ids = ["${aws_security_group.ecs.id}"]
-  depends_on             = ["aws_nat_gateway.natgw"]
   count                  = "${length(var.azs)}"
 
   tags {
@@ -37,7 +36,7 @@ resource "aws_alb" "web" {
   name                       = "web-alb"
   internal                   = false
   security_groups            = ["${aws_security_group.alb.id}"]
-  subnets                    = ["${aws_subnet.public_subnet.*.id}"]
+  subnets                    = ["${aws_subnet.private_subnet.*.id}"]
   enable_deletion_protection = true
 }
 
