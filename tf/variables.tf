@@ -30,13 +30,6 @@ variable "azs" {
   default = ["us-east-2a", "us-east-2b"]
 }
 
-variable "public_cidrs" {
-  default = {
-    "us-east-2a" = "10.0.7.0/24"
-    "us-east-2b" = "10.0.9.0/24"
-  }
-}
-
 variable "private_cidrs" {
   default = {
     "us-east-2a" = "10.0.8.0/24"
