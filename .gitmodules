@@ -1,0 +1,3 @@
+[submodule "hugo/themes/hugo-future-imperfect"]
+	path = hugo/themes/hugo-future-imperfect
+	url = git@github.com:austburn/hugo-future-imperfect.git

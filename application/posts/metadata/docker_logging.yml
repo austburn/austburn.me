@@ -1,7 +1,0 @@
-title: "Portable Docker Logging"
-date:
-  year:   2016
-  month:  7
-  day:    6
-gist: Docker is a useful tool, but getting your logs while maintaining the container-host separation can be difficult.
-post: docker_logging.html

@@ -1,7 +1,0 @@
-title: "Setting Up An ELK Stack for IRC Logs: Part Two"
-date:
-  year:   2015
-  month:  11
-  day:    30
-gist: This post will outline getting an Elasticsearch cluster setup in a cloud environment.
-post: elk_two.html

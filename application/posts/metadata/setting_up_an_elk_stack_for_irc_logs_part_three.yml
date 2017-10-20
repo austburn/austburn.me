@@ -1,7 +1,0 @@
-title: "Setting Up An ELK Stack for IRC Logs: Part Three"
-date:
-  year:   2016
-  month:  2
-  day:    1
-gist: This post will outline upgrading to Logstash 2.1.x and getting Kibana setup to visualize our logs.
-post: elk_three.html
