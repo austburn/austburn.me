@@ -1,6 +1,6 @@
 +++
 author = "Austin Burnett"
-categories = [""]
+categories = ["go", "golang", "networking", "security", "cryptography"]
 date = "2015-05-26"
 description = "In this post, I discuss basic security protocols you encounter everyday and demonstrate how they work using Golang."
 title = "Creating a Secure Server in Golang"

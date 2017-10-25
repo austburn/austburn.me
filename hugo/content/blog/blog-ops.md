@@ -1,6 +1,6 @@
 +++
 author = "Austin Burnett"
-categories = [""]
+categories = ["operations", "cicd", "docker", "ansible"]
 date = "2016-04-12"
 description = "I decided to apply operations to my blog, here is the story."
 title = "Blog Ops'd"

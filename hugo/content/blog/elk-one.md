@@ -1,6 +1,6 @@
 +++
 author = "Austin Burnett"
-categories = [""]
+categories = ["elasticsearch", "logstash", "kibana", "elk", "logging"]
 date = "2015-10-19"
 description = "The ELK stack is something that I've learned about through work. In this post, I try to apply what I've learned to my IRC logs."
 title = "Setting Up An ELK Stack for IRC Logs: Part One"

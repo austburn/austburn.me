@@ -1,6 +1,6 @@
 +++
 author = "Austin Burnett"
-categories = [""]
+categories = ["docker", "logging", "logspout", "logstash"]
 date = "2016-07-06"
 description = "Docker is a useful tool, but getting your logs while maintaining the container-host separation can be difficult."
 title = "Portable Docker Logging"

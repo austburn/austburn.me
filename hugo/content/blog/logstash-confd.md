@@ -1,6 +1,6 @@
 +++
 author = "Austin Burnett"
-categories = [""]
+categories = ["docker", "logstash", "confd", "logging"]
 date = "2016-08-12"
 description = "Making a dynamic Logstash container with confd."
 title = "Logstash and confd"

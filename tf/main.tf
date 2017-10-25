@@ -118,3 +118,18 @@ resource "aws_ecs_task_definition" "web" {
     expression = "attribute:ecs.availability-zone in [${join(",", var.azs)}]"
   }
 }
+
+resource "aws_s3_bucket" "blog" {
+  bucket = "blog.austburn.me"
+  acl    = "public-read"
+  policy = "${file("${path.module}/files/s3-policy.json")}"
+
+  website {
+    index_document = "index.html"
+    error_document = "404.html"
+  }
+
+  versioning {
+    enabled = true
+  }
+}

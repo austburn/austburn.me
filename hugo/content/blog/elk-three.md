@@ -1,6 +1,6 @@
 +++
 author = "Austin Burnett"
-categories = [""]
+categories = ["elasticsearch", "logstash", "kibana", "elk", "logging"]
 date = "2016-02-01"
 description = "This post will outline upgrading to Logstash 2.1.x and getting Kibana setup to visualize our logs."
 title = "Setting Up An ELK Stack for IRC Logs: Part Three"

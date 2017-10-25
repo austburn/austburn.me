@@ -1,6 +1,6 @@
 +++
 author = "Austin Burnett"
-categories = [""]
+categories = ["elasticsearch", "logstash", "kibana", "elk", "logging"]
 date = "2015-11-30"
 description = "This post will outline getting an Elasticsearch cluster setup in a cloud environment."
 title = "Setting Up An ELK Stack for IRC Logs: Part Two"
