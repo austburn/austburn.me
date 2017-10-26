@@ -15,7 +15,6 @@ dependencies:
 test:
   override:
     - terraform init && terraform plan
-    - ls -R themes
 
 deployment:
   master:
