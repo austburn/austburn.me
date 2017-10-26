@@ -1,3 +1,8 @@
+checkout:
+  post:
+    - git submodule sync
+    - git submodule update --init
+
 dependencies:
   override:
     - wget https://github.com/gohugoio/hugo/releases/download/v0.30.2/hugo_0.30.2_Linux-64bit.deb
