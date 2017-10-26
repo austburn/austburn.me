@@ -1,10 +1,7 @@
 *.pyc
 *.retry
-bower_components
 env
-drafts
-node_modules
 *.min.*
 .terraform/
-terraform.tfstate.backup
-
+public/*
+*.tfstate.*
