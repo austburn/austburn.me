@@ -3,6 +3,5 @@
 env
 *.min.*
 .terraform/
-terraform.tfstate.backup
-hugo/public
-
+public/*
+*.tfstate.*
