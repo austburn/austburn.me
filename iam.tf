@@ -14,7 +14,8 @@ resource "aws_iam_user_policy" "circle_ci_push" {
       "Action": [
         "iam:PutUserPolicy",
         "route53:*",
-        "s3:*"
+        "s3:*",
+        "cloudfront:UpdateDistribution"
       ],
       "Effect": "Allow",
       "Resource": "*"
