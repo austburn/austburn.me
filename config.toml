@@ -2,7 +2,7 @@ baseURL = "https://austburn.me/"
 languageCode = "en-us"
 title = "Austin Burnett"
 theme = "hugo-future-imperfect"
-
+uglyurls = true
 preserveTaxonomyNames = true
 paginate = 3
 googleAnalytics = "UA-45021956-1"
