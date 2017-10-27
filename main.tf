@@ -52,6 +52,12 @@ resource "aws_cloudfront_distribution" "blog_distro" {
   aliases = ["austburn.me"]
   price_class = "PriceClass_100"
 
+  custom_error_response {
+    error_code = 404
+    response_code = 200
+    response_page_path = "/index.html"
+  }
+
   default_cache_behavior {
     target_origin_id = "S3-blog.austburn.me"
     allowed_methods  = ["GET", "HEAD"]
