@@ -11,7 +11,7 @@ pluralizeListTitles = false
 [params]
   description          = "Personal blog of Austin Burnett."
   navbarTitle          = "Austin Burnett"
-  viewMorePostLink     = "/blog/"
+  viewMorePostLink     = "/blog.html"
 
 # Optional Params
   # Sets navbarTitle to match the section of the website
@@ -34,11 +34,8 @@ pluralizeListTitles = false
   faviconVersion       = ""
   # Sets Social Share links to appear on posts
   socialShare          = true
-  # Load custom CSS or JavaScript files. The variable is an array so that you
   # can load multiple files if necessary. You can also load the standard theme
   # files by adding the value, "default".
-  # customCSS            = ["default", "/path/to/file"]
-  # customJS             = ["default", "/path/to/file"]
   customCSS            = ["default"]
   customJS             = ["default"]
 
@@ -90,19 +87,19 @@ pluralizeListTitles = false
 
 [[menu.main]]
   name = "About"
-  url = "/about/"
+  url = "/about.html"
   identifier = "fa fa-id-card-o"
   weight = 2
 
 [[menu.main]]
   name = "Blog"
-  url = "/blog/"
+  url = "/blog.html"
   identifier = "fa fa-newspaper-o"
   weight = 3
 
 [[menu.main]]
   name = "Categories"
-  url = "/categories/"
+  url = "/categories.html"
   identifier = "fa fa-sitemap"
   weight = 5
 
