@@ -12,7 +12,7 @@ pluralizeListTitles = false
   description          = "Personal blog of Austin Burnett."
   navbarTitle          = "Austin Burnett"
   viewMorePostLink     = "/blog.html"
-
+  htmlSuffix           = true
 # Optional Params
   # Sets navbarTitle to match the section of the website
   dynamicTitles        = true
