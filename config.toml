@@ -7,6 +7,7 @@ preserveTaxonomyNames = true
 paginate = 3
 googleAnalytics = "UA-45021956-1"
 pluralizeListTitles = false
+pygmentsStyle = "borland"
 
 [params]
   description          = "Personal blog of Austin Burnett."
