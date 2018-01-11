@@ -3,7 +3,7 @@ author = "Austin Burnett"
 categories = ["travel", "camping", "hiking", "texas", "outdoors"]
 date = "2018-01-11"
 description = "Nathan and I did our second annual Thanksgiving Trip, here's some highlights."
-title = "Thanksgiving Trip 2018"
+title = "Thanksgiving Trip 2017"
 type = "post"
 
 +++
