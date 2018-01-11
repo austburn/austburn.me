@@ -1,7 +1,7 @@
 +++
 author = "Austin Burnett"
 categories = ["golang", "go", "performance", "memory"]
-date = "2018-01-09"
+date = "2018-01-10"
 description = "Some quick gotchas for memory profiling in Go."
 title = "Go Memory Profiling Gotcha"
 type = "post"
