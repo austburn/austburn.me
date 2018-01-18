@@ -19,7 +19,7 @@ I was quickly met with frustration. Many examples online assume you're building 
 package main
 
 import (
-    "fmt"
+    "log"
     "os"
     "runtime"
     "runtime/pprof"
@@ -29,8 +29,7 @@ func main() {
     // CPU Profile
     cpuProfile, err := os.Create("example-cpu.prof")
     if err != nil {
-        fmt.Println(err)
-        os.Exit(1)
+        log.Fatal(err)
     }
     pprof.StartCPUProfile(cpuProfile)
     defer pprof.StopCPUProfile()
@@ -45,13 +44,11 @@ func main() {
     runtime.GC()
     memProfile, err := os.Create("example-mem.prof")
     if err != nil {
-        fmt.Println(err)
-        os.Exit(1)
+        log.Fatal(err)
     }
     defer memProfile.Close()
     if err := pprof.WriteHeapProfile(memProfile); err != nil {
-        fmt.Println(err)
-        os.Exit(1)
+        log.Fatal(err)
     }
 }
 {{< /highlight >}}
@@ -116,3 +113,5 @@ ROUTINE ======================== main.main in /home/aburnett/go/src/stream-test/
 That is more of what we expected to see. If you notice, the `Type` is now `alloc_space` as opposed to the default `inuse_objects`. Now, in the intro I mentioned that I was using a small dataset. Before learning about `--alloc_space` I tried pulling in `github.com/pkg/profile` and added `defer profile.Start(profile.MemProfileRate(2048)).Stop()` at the top of `main`, not really knowing what `MemProfileRate` might do. After adding this, I noticed the profile it generated was non-empty. I started digging into what `github.com/pkg/profile` does. Turns out, it mostly wraps `runtime` to make it more convenient to profile. Setting `MemProfileRate` adjusts the rate at which it samples memory usage. The default is 1 sample per 512kb allocated. I found out that my small sample was never crossing this threshold, resulting in an empty profile. If you want to record _every_ allocation, you can set this to 1. This should enable you to detect problems at any scale. Like I mentioned, there's no need to use `github.com/pkg/profile` other than convenience, you can do this with `runtime` (i.e. `runtime.MemProfileRate = 2048`).
 
 As I discovered, while the tooling may be robust, the documentation is somewhat lacking for Go's profiling tools, especially if you're not using a web application. If you find yourself looking at an empty memory profile, make sure that you're looking at the right usage pattern (inuse_objects - running application vs. alloc_space - program that has already ran) and that you're sampling frequency is adjusted accordingly (or that you track every allocation).
+
+**Edit 1/18/18**: I learned about `log.Fatal` and updated snippet.
