@@ -1,6 +1,8 @@
 version: 2
 jobs:
   build:
+    docker:
+      - image: ubuntu
     steps:
       - checkout
       - run: git submodule sync
@@ -15,10 +17,14 @@ jobs:
             unzip -d "${HOME}/bin" /tmp/terraform.zip
 
   test:
+    docker:
+      - image: ubuntu
     steps:
       - run: terraform init && terraform plan
 
   deploy:
+    docker:
+      - image: ubuntu
     steps:
       - run:
           command:
