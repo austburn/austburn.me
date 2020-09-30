@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: ubuntu
+      - image: cimg/base:2020.09
     steps:
       - checkout
       - run: git submodule sync
@@ -18,13 +18,13 @@ jobs:
 
   test:
     docker:
-      - image: ubuntu
+      - image: cimg/base:2020.09
     steps:
       - run: terraform init && terraform plan
 
   deploy:
     docker:
-      - image: ubuntu
+      - image: cimg/base:2020.09
     steps:
       - run:
           command:
