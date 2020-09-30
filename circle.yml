@@ -12,7 +12,7 @@ jobs:
       - run: git submodule update --init
 
       - run:
-          command:
+          command: |
             wget https://github.com/gohugoio/hugo/releases/download/v0.30.2/hugo_0.30.2_Linux-64bit.deb
             sudo dpkg -i hugo_0.30.2_Linux-64bit.deb
             sudo pip install --upgrade awscli
@@ -30,7 +30,7 @@ jobs:
       - image: cimg/base:2020.09
     steps:
       - run:
-          command:
+          command: |
             terraform apply
             hugo -b "https://austburn.me" --theme=hugo-future-imperfect
             aws s3 cp --recursive public s3://blog.austburn.me/
