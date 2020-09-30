@@ -15,7 +15,8 @@ jobs:
           command: |
             wget https://github.com/gohugoio/hugo/releases/download/v0.30.2/hugo_0.30.2_Linux-64bit.deb
             sudo dpkg -i hugo_0.30.2_Linux-64bit.deb
-            sudo apt-get install python-pip
+            sudo apt-get update
+            sudo apt-get install -y python-pip
             sudo pip install --upgrade awscli
             wget -O /tmp/terraform.zip https://releases.hashicorp.com/terraform/0.10.8/terraform_0.10.8_linux_amd64.zip
             unzip -d "${HOME}/bin" /tmp/terraform.zip
