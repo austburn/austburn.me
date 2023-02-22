@@ -1,25 +1,54 @@
-checkout:
-  post:
-    - git submodule sync
-    - git submodule update --init
+version: 2.1
+jobs:
+  deps:
+    docker:
+     - image: cimg/base:2022.05
+    steps:
+      - run:
+          name: hugo
+          command: |
+            sudo apt-get update
+            sudo apt install hugo python3-pip gnupg software-properties-common
+      - run:
+          name: terraform
+          command: |
+            pip3 install --upgrade awscli
+            wget -O- https://apt.releases.hashicorp.com/gpg | gpg --dearmor | sudo tee /usr/share/keyrings/hashicorp-archive-keyring.gpg
+            gpg --no-default-keyring --keyring /usr/share/keyrings/hashicorp-archive-keyring.gpg --fingerprint
+            echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+            sudo apt update && sudo apt install terraform
+  submodule:
+    docker:
+      - image: cimg/base:2022.05
+    steps:
+      - checkout
+      - run:
+          name: get submoduled theme
+          command: |
+            git submodule sync
+            git submodule update --init
+  test:
+    docker:
+      - image: cimg/base:2022.05
+    steps:
+      - checkout
+      - run: terraform init && terraform plan
 
-dependencies:
-  override:
-    - wget https://github.com/gohugoio/hugo/releases/download/v0.30.2/hugo_0.30.2_Linux-64bit.deb
-    - sudo dpkg -i hugo_0.30.2_Linux-64bit.deb
-    - sudo pip install --upgrade awscli
-    - wget -O /tmp/terraform.zip https://releases.hashicorp.com/terraform/0.10.8/terraform_0.10.8_linux_amd64.zip
-    - unzip -d "${HOME}/bin" /tmp/terraform.zip
+workflows:
+  main:
+    jobs:
+      - deps
+      - submodule:
+          requires:
+            - deps
+      - test:
+          requires:
+            - submodule
 
-
-test:
-  override:
-    - terraform init && terraform plan
-
-deployment:
-  master:
-    branch: master
-    commands:
-      - terraform apply
-      - hugo -b "https://austburn.me" --theme=hugo-future-imperfect
-      - aws s3 cp --recursive public s3://blog.austburn.me/
+# deployment:
+#   master:
+#     branch: master
+#     commands:
+#       - terraform apply
+#       - hugo -b "https://austburn.me" --theme=hugo-future-imperfect
+#       - aws s3 cp --recursive public s3://blog.austburn.me/
