@@ -4,6 +4,9 @@ jobs:
     docker:
       - image: austburn/austburn.me:0.0.2
     steps:
+      - add_ssh_keys:
+          fingerprints:
+            - "SHA256:c4TK2coml7ZR1YIZo69AATCeRpXtInXJiMVD/4oH+9k austburn@gmail.com"
       - checkout
       - run:
           name: get submoduled theme
