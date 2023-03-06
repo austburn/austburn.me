@@ -63,6 +63,8 @@ jobs:
           role-to-assume: arn:aws:iam::296307749888:role/github-actions
           aws-region: us-west-2
 
-      - name: terraform plan
+      - name: terraform
         uses: hashicorp/setup-terraform@v2.0.3
+        
+      - name: terraform plan
         run: terraform plan
