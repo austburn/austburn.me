@@ -71,8 +71,5 @@ jobs:
       - name: terraform apply
         run: terraform apply -auto-approve
 
-      - name: install-aws-cli-action
-        uses: unfor19/install-aws-cli-action@v2
-
       - name: push s3 objects
         run: aws s3 cp --recursive austburn.me/public s3://blog.austburn.me/
