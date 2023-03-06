@@ -3,5 +3,6 @@
 env
 *.min.*
 .terraform/
+.terraform.lock.hcl
 austburn.me/public/*
 *.tfstate.*

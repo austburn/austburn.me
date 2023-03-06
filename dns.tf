@@ -13,3 +13,9 @@ resource "aws_route53_record" "alb_record" {
     evaluate_target_health = true
   }
 }
+
+resource "aws_acm_certificate" "cert" {
+  provider = aws.east1
+  domain_name = "austburn.me"
+  subject_alternative_names = ["*.austburn.me"]
+}
