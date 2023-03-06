@@ -4,7 +4,7 @@ resource "aws_iam_user" "circle_ci_user" {
 
 resource "aws_iam_user_policy" "circle_ci_push" {
   name = "circle_ci_push"
-  user = "${aws_iam_user.circle_ci_user.name}"
+  user = aws_iam_user.circle_ci_user.name
 
   policy = <<EOF
 {
@@ -27,6 +27,6 @@ EOF
 
 resource "aws_iam_policy_attachment" "circle_ci_read_only" {
   name       = "circle_ci_read_only"
-  users      = ["${aws_iam_user.circle_ci_user.name}"]
+  users      = [aws_iam_user.circle_ci_user.name]
   policy_arn = "arn:aws:iam::aws:policy/ReadOnlyAccess"
 }

@@ -7,14 +7,14 @@ terraform {
 }
 
 provider "aws" {
-  region = "${var.region}"
+  region = var.region
 }
 
 
 resource "aws_s3_bucket" "blog" {
   bucket = "blog.austburn.me"
   acl    = "public-read"
-  policy = "${file("${path.module}/files/s3-policy.json")}"
+  policy = file("${path.module}/files/s3-policy.json")
 
   website {
     index_document = "index.html"
@@ -39,7 +39,7 @@ EOF
 
 resource "aws_cloudfront_distribution" "blog_distro" {
   origin {
-    domain_name   = "${aws_s3_bucket.blog.bucket_domain_name}"
+    domain_name   = aws_s3_bucket.blog.bucket_domain_name
     origin_id     = "S3-blog.austburn.me"
     s3_origin_config {
       origin_access_identity = "origin-access-identity/cloudfront/E3P6W9J7WP1FCM"
@@ -78,7 +78,7 @@ resource "aws_cloudfront_distribution" "blog_distro" {
   }
 
   viewer_certificate {
-    acm_certificate_arn = "arn:aws:acm:us-east-1:296307749888:certificate/702fcd6c-d5c3-4b76-8284-511afb5f0b14"
+    acm_certificate_arn = "arn:aws:acm:us-east-1:296307749888:certificate/93cb4935-b4c2-413d-8d21-1dbf75b9d8f9"
     minimum_protocol_version = "TLSv1.1_2016"
     ssl_support_method = "sni-only"
   }
