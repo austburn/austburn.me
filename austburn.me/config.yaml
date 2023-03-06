@@ -1,0 +1,73 @@
+baseURL: 'https://austburn.me/'
+languageCode: en-us
+title: Austin Burnett
+theme: hugo-future-imperfect
+uglyurls: true
+preserveTaxonomyNames: true
+paginate: 3
+googleAnalytics: UA-45021956-1
+pluralizeListTitles: false
+pygmentsStyle: borland
+params:
+  description: Personal blog of Austin Burnett.
+  navbarTitle: Austin Burnett
+  viewMorePostLink: /blog.html
+  htmlSuffix: true
+  dynamicTitles: true
+  rssAppearAtTop: true
+  rssAppearAtBottom: true
+  socialAppearAtTop: true
+  socialAppearAtBottom: true
+  categoriesByCount: true
+  includeReadingTime: true
+  loadFavicon: true
+  faviconVersion: ''
+  socialShare: true
+  customCSS:
+    - default
+  customJS:
+    - default
+  staticman:
+    staticman: false
+    username: ''
+    repo: ''
+    branch: ''
+  intro:
+    header: Austin Burnett
+    paragraph: <i class='fa fa-hand-rock-o'></i><br>
+      A little bit of everything.
+    pic:
+      src: /img/me.jpg
+      circle: false
+      imperfect: true
+      width: ''
+      alt: Austin Burnett
+  postAmount:
+    sidebar: 3
+  categoriesAmount:
+    sidebar: 3
+menu:
+  main:
+    - name: Home
+      url: /
+      identifier: fa fa-home
+      weight: 1
+    - name: About
+      url: /about.html
+      identifier: fa fa-id-card-o
+      weight: 2
+    - name: Blog
+      url: /blog.html
+      identifier: fa fa-newspaper-o
+      weight: 3
+    - name: Categories
+      url: /categories.html
+      identifier: fa fa-sitemap
+      weight: 5
+social:
+  github: austburn
+  bitbucket: austburn
+  linkedin: austin-burnett-137406b4
+  instagram: austburnvt
+  twitter: austburn
+  email: austburn@gmail.com
