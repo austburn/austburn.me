@@ -14,9 +14,9 @@ We set out on Tuesday, November 21 for White Sands. Our decision to go there fir
 
 As soon as we reached New Mexico, we began to climb into the mountains. We went through Cloudcroft, NM - a small, lively mountain town in the Lincoln National Forest. As we came down into Alamogordo, NM we spotted White Sands in the distance.
 
-<div class="carousel" data-flickity='{"imagesLoaded": true}'>
-    <img src="/img/thanksgiving/DSC00208.JPG" alt="Original railroad in Cloudcroft">
-    <img src="/img/thanksgiving/DSC00148.JPG" alt="White Sands in the distance">
+<div class="main-carousel" data-flickity='{"imagesLoaded": true}'>
+    <img class="carousel-cell" src="/img/thanksgiving/DSC00208.JPG" alt="Original railroad in Cloudcroft">
+    <img class="carousel-cell" src="/img/thanksgiving/DSC00148.JPG" alt="White Sands in the distance">
 </div>
 <div class="caption">&nbsp;</div>
 <br>
@@ -52,9 +52,9 @@ We spent Thanksgiving morning catching the sun rise at Hunter Peak. Weirdly enou
 
 We made our way down the Bear Canyon Trail, which I can only assume is named for the deep cuts in the rock that would make seemingly perfect bear dens. We reserved a campsite at the Visitor's Center and made our way to El Capitan. As we made our way around and up to the rock formation, we were constantly presented with new perspectives of the formation, each as amazing as the next. Despite capturing every angle, none quite does the size and scale justice.
 
-<div class="carousel" data-flickity='{"imagesLoaded": true}'>
-    <img src="/img/thanksgiving/DSC00301.JPG" alt="El Capitan">
-    <img src="/img/thanksgiving/DSC00294.JPG" alt="Salt Flats">
+<div class="main-carousel" data-flickity='{"imagesLoaded": true}'>
+    <img class="carousel-cell" src="/img/thanksgiving/DSC00301.JPG" alt="El Capitan">
+    <img class="carousel-cell" src="/img/thanksgiving/DSC00294.JPG" alt="Salt Flats">
 </div>
 <div class="caption">&nbsp;</div>
 <br>
@@ -69,11 +69,11 @@ As we made it back to camp, I couldn't unsee Devil's Hall from the pictures I no
 
 The next day we set out for an intense, long climb to McKittrick Ridge. The first section takes you along a riverbed which this time of the year has water, albeit very low. The first stop along our route was at Pratt Cabin. Wallace Pratt is who we have to thank for Guadalupe Mountains National Park and Pratt Cabin is where he lived. The cabin exterior is composed almost entirely by stone. Looking into the details, there is some incredible craftsmanship. Across from the cabin is what appears to be a two car garage. After joking with the ranger at the cabin, I learned that was actually an original structure and it is rumored Mr. Pratt drove his Mercedes back to the cabin.
 
-<div class="carousel" data-flickity='{"imagesLoaded": true}'>
-    <img src="/img/thanksgiving/DSC00355.JPG" alt="Pratt Cabin Gate">
-    <img src="/img/thanksgiving/DSC00343.JPG" alt="House">
-    <img src="/img/thanksgiving/DSC00351.JPG" alt="Garage">
-    <img src="/img/thanksgiving/DSC00510.JPG" alt="Stone Roof">
+<div class="main-carousel" data-flickity='{"imagesLoaded": true}'>
+    <img class="carousel-cell" src="/img/thanksgiving/DSC00355.JPG" alt="Pratt Cabin Gate">
+    <img class="carousel-cell" src="/img/thanksgiving/DSC00343.JPG" alt="House">
+    <img class="carousel-cell" src="/img/thanksgiving/DSC00351.JPG" alt="Garage">
+    <img class="carousel-cell" src="/img/thanksgiving/DSC00510.JPG" alt="Stone Roof">
 </div>
 <div class="caption">&nbsp;</div>
 <br>
@@ -88,27 +88,27 @@ The arduous journey continued through some Fall scenery that's difficult to find
 
 The step through The Notch was euphoric. You're tired, hungry, wondering when this all might come to an end when you step through to reveal a deep valley facing a massive rock wall. We sat for a good half hour trying to take in all there was to offer. Pictures really don't do it justice. On our ride back Nathan actually looked up McKittrick Canyon and it turns out we're not alone. Backpacking forums shower it with praise and compare the views to some of those more often captured out West.
 
-<div class="carousel" data-flickity='{"imagesLoaded": true}'>
-    <img src="/img/thanksgiving/DSC00381.JPG" alt="The Notch at eye level">
-    <img src="/img/thanksgiving/DSC00387.JPG" alt="The Notch from above">
+<div class="main-carousel" data-flickity='{"imagesLoaded": true}'>
+    <img class="carousel-cell" src="/img/thanksgiving/DSC00381.JPG" alt="The Notch at eye level">
+    <img class="carousel-cell" src="/img/thanksgiving/DSC00387.JPG" alt="The Notch from above">
 </div>
 <div class="caption">&nbsp;</div>
 <br>
 
 Pressing on from The Notch we continued to climb. Of note on the trail to the ridge was hiking across the spline of South McKittrick Canyon. The winds rushing up the canyon were fierce and brisk. In general, our afternoon was filled with strong winds. We ended up reaching the ridge at mid-afternoon. We found a site, setup camp, and did some exploring along the ridge. We found spruce, agave, Pinyon and Ponderosa pine. Seeing all of this in one place truly made it a Western Thanksgiving.
 
-<div class="carousel" data-flickity='{"imagesLoaded": true}'>
-    <img src="/img/thanksgiving/DSC00407.JPG" alt="Agave">
-    <img style="image-orientation: from-image;max-height: 696px;" src="/img/thanksgiving/DSC00396.JPG" alt="Charlie Brown Tree">
+<div class="main-carousel" data-flickity='{"imagesLoaded": true}'>
+    <img class="carousel-cell" src="/img/thanksgiving/DSC00407.JPG" alt="Agave">
+    <img class="carousel-cell" style="image-orientation: from-image;max-height: 696px;" src="/img/thanksgiving/DSC00396.JPG" alt="Charlie Brown Tree">
 </div>
 <div class="caption">&nbsp;</div>
 <br>
 
 That night I tried my hand at some nighttime photography which mostly came out blurry. I don't know that we ever really determined what we were looking at, but as the sun began to go down we could see headlights and eventually town lights in the distance.
 
-<div class="carousel" data-flickity='{"imagesLoaded": true}'>
-    <img src="/img/thanksgiving/DSC00417.JPG" alt="Sunset">
-    <img src="/img/thanksgiving/DSC00455.JPG" alt="Nighttime">
+<div class="main-carousel" data-flickity='{"imagesLoaded": true}'>
+    <img class="carousel-cell" src="/img/thanksgiving/DSC00417.JPG" alt="Sunset">
+    <img class="carousel-cell" src="/img/thanksgiving/DSC00455.JPG" alt="Nighttime">
 </div>
 <div class="caption">&nbsp;</div>
 <br>
@@ -119,22 +119,22 @@ I didn't know what to expect at Carlsbad, but my assumptions were proven true. P
 
 I've really been in one other cave that I can remember, but what shocked be about Carlsbad was how vast and open it was. There's a couple tight squeezes but a majority of the tour is through massive rooms of solid rock. There are features of all types for the seasoned cave explorer.
 
-<div class="carousel" data-flickity='{"imagesLoaded": true}'>
-    <img src="/img/thanksgiving/DSC00519.JPG" alt="Cave Entrance">
-    <img src="/img/thanksgiving/DSC00578.JPG" alt="Stalactites">
-    <img src="/img/thanksgiving/DSC00579.JPG" alt="Crystal Clear Pool">
+<div class="main-carousel" data-flickity='{"imagesLoaded": true}'>
+    <img class="carousel-cell" src="/img/thanksgiving/DSC00519.JPG" alt="Cave Entrance">
+    <img class="carousel-cell" src="/img/thanksgiving/DSC00578.JPG" alt="Stalactites">
+    <img class="carousel-cell" src="/img/thanksgiving/DSC00579.JPG" alt="Crystal Clear Pool">
 </div>
 <div class="caption">&nbsp;</div>
 <br>
 
 All in all, another epic adventure in West Texas/New Mexico. Just wish it wasn't so darn far away...
 
-<div class="carousel" data-flickity='{"imagesLoaded": true}'>
-    <img src="/img/thanksgiving/DSC00394.JPG" alt="Valley">
+<div class="main-carousel" data-flickity='{"imagesLoaded": true}'>
+    <img class="carousel-cell" src="/img/thanksgiving/DSC00394.JPG" alt="Valley">
     <img style="image-orientation: from-image;max-height: 696px;" src="/img/thanksgiving/DSC00488.JPG" alt="Steps Before The Notch">
-    <img src="/img/thanksgiving/DSC00475.JPG" alt="The Notch feat. Fall">
-    <img src="/img/thanksgiving/IMG_4606.JPG" alt="All done!">
-    <img src="/img/thanksgiving/IMG_4607.JPG" alt="West Texas Roads">
+    <img class="carousel-cell" src="/img/thanksgiving/DSC00475.JPG" alt="The Notch feat. Fall">
+    <img class="carousel-cell" src="/img/thanksgiving/IMG_4606.JPG" alt="All done!">
+    <img class="carousel-cell" src="/img/thanksgiving/IMG_4607.JPG" alt="West Texas Roads">
 </div>
 <div class="caption">&nbsp;</div>
 <br>

@@ -37,9 +37,9 @@ I felt good on raceday. I had specific finish times in mind, but on raceday I fo
 
 Today, I'm feeling a bit better but still hobbling around. At this point it's hard to imagine running any distance, let alone another marathon. I have to be honest, I'm not sure another marathon is appealing to me. I enjoy the shorter distances much more and would maybe strive for a 1:30 half marathon before springing for another full. What I will carry on is running itself. There's something about running that can't quite be explained unless you find yourself in the headspace that it provides. I theorize that because it demands so much physically, it really leaves your mind to focus on two things: the mental aspect of running itself and potentially one other thought. In this age of distraction, it's hard to hone in on specific thoughts. For me, that's something that running has provided that I haven't been able to find elsewhere.
 
-<div class="carousel" data-flickity='{"imagesLoaded": true}'>
-    <img src="/img/marathon/pizza.jpg" alt="Proper refuel.">
-    <img src="/img/marathon/magnets.jpg" alt="Race magnets.">
+<div class="main-carousel" data-flickity='{"imagesLoaded": true}'>
+    <img class="carousel-cell" src="/img/marathon/pizza.jpg" alt="Proper refuel.">
+    <img class="carousel-cell" src="/img/marathon/magnets.jpg" alt="Race magnets.">
 </div>
 <div class="caption">&nbsp;</div>
 <br>
