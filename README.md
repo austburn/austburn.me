@@ -7,9 +7,15 @@ Welcome to my [personal blog's](https://austburn.me) repository.
 
 ## Requirements
 
-* `tfenv`
-* `docker`
+* go
+* hugo
 
-## Deploy Container
+```
+brew install hugo
+```
 
-After merging, run `make tf_apply` and when prompted for the `git_revision`, paste the master hash. At this point, `terraform` notifies ECS there is a new task definition.
+## Development
+
+```
+hugo server -D
+```

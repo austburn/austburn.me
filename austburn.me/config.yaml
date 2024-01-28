@@ -68,6 +68,10 @@ menu:
       url: /categories.html
       identifier: fa fa-sitemap
       weight: 5
+outputs:
+  section:
+  - html
+  - rss
 social:
   github: austburn
   bitbucket: austburn
