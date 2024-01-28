@@ -14,7 +14,7 @@ Popularized by the [Go blog](https://blog.golang.org/pipelines) and referenced i
 
 The context of out problem is a shipping warehouse. Items are sent from the shelves to a conveyor belt. An employee packs the items and places them on an outbound conveyor belt to be shipped. It's important here to note that we'll have one item per box and that some items may require extra handling to package than others. Let's first conquer the problem using pipelines:
 
-{{< highlight go "linenos=inline" >}}
+{{< highlight go >}}
 // https://play.golang.org/p/JWEIQDdxv6G
 package main
 
@@ -92,7 +92,7 @@ func main() {
 
 In this example, `PrepareItems` queues up items on an unbuffered channel, think of this as our conveyor belt from the shelves to the employee packing the items. `PackItems` pulls from this channel, places it on the packages channel (i.e., our shipping conveyor belt), and assimilates work by calling `time.Sleep` for the `PackingEffort` in seconds. This pipeline essentially runs serially, requiring 25s to run. A possible solution to this problem is adding more workers. Additional workers can pack items and make sure they make it onto the shipping belt. This is the essence of fan-out, fan-in. We'll introduce additional goroutines in a certain stage to increase our throughput, placing them back into the single pipeline. (**Note**: I'm going to use a hard-coded number for number of additional goroutines to run for simplicity. You may want to explore `runtime.NumCPU()` or experiment in your production environment to understand what suits your usecase.)
 
-{{< highlight go "linenos=inline" >}}
+{{< highlight go >}}
 // https://play.golang.org/p/_NAoJ3szSyo
 package main
 
